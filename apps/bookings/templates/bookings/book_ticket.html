@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Ticket</title>
+</head>
+<body>
+    <h1>Book Your Ticket</h1>
+
+    <!-- Display Success Message -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+    
+        <label for="show">Select Show:</label>
+        <select name="show" required>
+            {% for show in shows %}
+                <option value="{{ show.id }}">{{ show.event.event_name }} - {{ show.start_time }}</option>
+            {% endfor %}
+        </select>
+    
+        <label for="seat">Select Seat:</label>
+        <select name="seat">
+            {% for seat in seats %}
+                <option value="{{ seat.id }}">Seat {{ seat.seat_number }}</option>
+            {% empty %}
+                <option disabled>No available seats</option>
+            {% endfor %}
+        </select>
+        
+    
+        <button type="submit">Book Now</button>
+    </form>
+    
+</body>
+</html>
