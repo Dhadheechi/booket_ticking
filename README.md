@@ -27,3 +27,6 @@ DB_PASSWORD=your_new_password
 DB_HOST=localhost
 
 DB_PORT=3306
+
+
+hi guys
