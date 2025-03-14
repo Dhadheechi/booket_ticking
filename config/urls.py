@@ -23,4 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),  # Redirects to register
     path("book/", include("apps.bookings.urls")),  # Ensure the bookings app URLs are included
+    
 ]

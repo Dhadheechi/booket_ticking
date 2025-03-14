@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+print("✅ Django settings module loaded successfully")
 
 from pathlib import Path
 
@@ -26,6 +27,10 @@ SECRET_KEY = "django-insecure-4z^((oy81kgu&hm45@ds3q-k(wgg8lqw)q^3z81i0+wag%8om$
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+from django.urls import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('after_login')  # Uses the named URL instead of a string
+
 
 
 from dotenv import load_dotenv
@@ -76,7 +81,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "apps/bookings/templates"],  # Add this line
+        'DIRS': [BASE_DIR / "templates"],  # Add this line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,7 +155,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

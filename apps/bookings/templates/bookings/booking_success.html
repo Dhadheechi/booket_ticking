@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Booking Successful 🎉</h2>
+<p>Your booking for <strong>{{ booking.show.event.event_name }}</strong> at <strong>{{ booking.show.slot_time }}</strong> has been confirmed.</p>
+<p><strong>Seat Number:</strong> {{ booking.seat.seat_number }}</p>
+
+<a href="{% url 'book_ticket' %}">Book Another Ticket</a>
+{% endblock %}

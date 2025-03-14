@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your City</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/city_selection.css' %}">
+</head>
+<body>
+
+    <div class="city-modal" id="cityModal">
+        <div class="modal-content">
+            <input type="text" id="citySearch" placeholder="Search for your city">
+            
+            <h3>Select Your City</h3>
+            <div class="city-list" id="cityList">
+                {% for city in cities %}
+                    <div class="city" data-city-id="{{ city.id }}" onclick="selectCity('{{ city.id }}')">
+                        {{ city.city_name }} (ID: {{ city.id }}) <!-- ✅ Debugging -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden form to submit selected city -->
+    <form id="cityForm" action="{% url 'set_city' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="city_id" id="selectedCityId">
+    </form>
+
+    <script>
+        function selectCity(cityId) {
+            console.log("Selected City ID:", cityId);  // ✅ Debugging output
+            document.getElementById('selectedCityId').value = cityId;
+            document.getElementById('cityForm').submit();  // ✅ Auto-submit form
+        }
+    </script>
+    
+
+</body>
+</html>

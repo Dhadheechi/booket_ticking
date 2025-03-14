@@ -18,7 +18,7 @@ class Theatre(models.Model):
         return self.theatre_name
 
 class Screen(models.Model):
-    theatre = models.ForeignKey(Theatre, on_delete=models.CASCADE)
+    theatre = models.ForeignKey(Theatre, on_delete=models.CASCADE, related_name="screens")  # ✅ Add related_name
     screen_name = models.CharField(max_length=100)
     total_seats = models.PositiveIntegerField()
 
@@ -106,7 +106,8 @@ class Booking(models.Model):
         (CANCELLED, 'Cancelled'),
         (CONFIRMED, 'Confirmed')
     ]
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     show = models.ForeignKey(Showtime, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     booking_date = models.DateTimeField(auto_now_add=True)
