@@ -25,7 +25,8 @@ urlpatterns = [
     path("get-shows/", views.get_shows, name="get-shows"),
     path("get-seats/", get_seats, name="get-seats"),
     path("get-tiers/", get_tiers, name="get_tiers"),
-    path("booking-success/<int:booking_id>/", views.booking_success, name="booking_success"),
+    # path("booking-success/<int:booking_id>/", views.booking_success, name="booking_success"),
 
 
 ]
+

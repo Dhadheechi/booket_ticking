@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.4.4, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: Booket_Ticking
+-- Host: localhost    Database: Booket_Ticking
 -- ------------------------------------------------------
 -- Server version	8.4.4
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admins` (
   `admin_id` int NOT NULL,
   `user_id` int NOT NULL,
@@ -47,7 +47,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
@@ -71,7 +71,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group_permissions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `group_id` int NOT NULL,
@@ -99,7 +99,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_permission` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,7 +117,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add event',7,'add_event'),(26,'Can change event',7,'change_event'),(27,'Can delete event',7,'delete_event'),(28,'Can view event',7,'view_event'),(29,'Can add screen',8,'add_screen'),(30,'Can change screen',8,'change_screen'),(31,'Can delete screen',8,'delete_screen'),(32,'Can view screen',8,'view_screen'),(33,'Can add customer',9,'add_customer'),(34,'Can change customer',9,'change_customer'),(35,'Can delete customer',9,'delete_customer'),(36,'Can view customer',9,'view_customer'),(37,'Can add seat',10,'add_seat'),(38,'Can change seat',10,'change_seat'),(39,'Can delete seat',10,'delete_seat'),(40,'Can view seat',10,'view_seat'),(41,'Can add booking',11,'add_booking'),(42,'Can change booking',11,'change_booking'),(43,'Can delete booking',11,'delete_booking'),(44,'Can view booking',11,'view_booking'),(45,'Can add organizer',12,'add_organizer'),(46,'Can change organizer',12,'change_organizer'),(47,'Can delete organizer',12,'delete_organizer'),(48,'Can view organizer',12,'view_organizer'),(49,'Can add transaction',13,'add_transaction'),(50,'Can change transaction',13,'change_transaction'),(51,'Can delete transaction',13,'delete_transaction'),(52,'Can view transaction',13,'view_transaction'),(53,'Can add theatre',14,'add_theatre'),(54,'Can change theatre',14,'change_theatre'),(55,'Can delete theatre',14,'delete_theatre'),(56,'Can view theatre',14,'view_theatre'),(57,'Can add cancellation',15,'add_cancellation'),(58,'Can change cancellation',15,'change_cancellation'),(59,'Can delete cancellation',15,'delete_cancellation'),(60,'Can view cancellation',15,'view_cancellation'),(61,'Can add admin',16,'add_admin'),(62,'Can change admin',16,'change_admin'),(63,'Can delete admin',16,'delete_admin'),(64,'Can view admin',16,'view_admin'),(65,'Can add city',17,'add_city'),(66,'Can change city',17,'change_city'),(67,'Can delete city',17,'delete_city'),(68,'Can view city',17,'view_city'),(69,'Can add showtime',18,'add_showtime'),(70,'Can change showtime',18,'change_showtime'),(71,'Can delete showtime',18,'delete_showtime'),(72,'Can view showtime',18,'view_showtime'),(73,'Can add tier',19,'add_tier'),(74,'Can change tier',19,'change_tier'),(75,'Can delete tier',19,'delete_tier'),(76,'Can view tier',19,'view_tier'),(77,'Can add customer',20,'add_customer'),(78,'Can change customer',20,'change_customer'),(79,'Can delete customer',20,'delete_customer'),(80,'Can view customer',20,'view_customer');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add event',7,'add_event'),(26,'Can change event',7,'change_event'),(27,'Can delete event',7,'delete_event'),(28,'Can view event',7,'view_event'),(29,'Can add screen',8,'add_screen'),(30,'Can change screen',8,'change_screen'),(31,'Can delete screen',8,'delete_screen'),(32,'Can view screen',8,'view_screen'),(33,'Can add customer',9,'add_customer'),(34,'Can change customer',9,'change_customer'),(35,'Can delete customer',9,'delete_customer'),(36,'Can view customer',9,'view_customer'),(37,'Can add seat',10,'add_seat'),(38,'Can change seat',10,'change_seat'),(39,'Can delete seat',10,'delete_seat'),(40,'Can view seat',10,'view_seat'),(41,'Can add booking',11,'add_booking'),(42,'Can change booking',11,'change_booking'),(43,'Can delete booking',11,'delete_booking'),(44,'Can view booking',11,'view_booking'),(45,'Can add organizer',12,'add_organizer'),(46,'Can change organizer',12,'change_organizer'),(47,'Can delete organizer',12,'delete_organizer'),(48,'Can view organizer',12,'view_organizer'),(49,'Can add transaction',13,'add_transaction'),(50,'Can change transaction',13,'change_transaction'),(51,'Can delete transaction',13,'delete_transaction'),(52,'Can view transaction',13,'view_transaction'),(53,'Can add theatre',14,'add_theatre'),(54,'Can change theatre',14,'change_theatre'),(55,'Can delete theatre',14,'delete_theatre'),(56,'Can view theatre',14,'view_theatre'),(57,'Can add cancellation',15,'add_cancellation'),(58,'Can change cancellation',15,'change_cancellation'),(59,'Can delete cancellation',15,'delete_cancellation'),(60,'Can view cancellation',15,'view_cancellation'),(61,'Can add admin',16,'add_admin'),(62,'Can change admin',16,'change_admin'),(63,'Can delete admin',16,'delete_admin'),(64,'Can view admin',16,'view_admin'),(65,'Can add city',17,'add_city'),(66,'Can change city',17,'change_city'),(67,'Can delete city',17,'delete_city'),(68,'Can view city',17,'view_city'),(69,'Can add showtime',18,'add_showtime'),(70,'Can change showtime',18,'change_showtime'),(71,'Can delete showtime',18,'delete_showtime'),(72,'Can view showtime',18,'view_showtime'),(73,'Can add tier',19,'add_tier'),(74,'Can change tier',19,'change_tier'),(75,'Can delete tier',19,'delete_tier'),(76,'Can view tier',19,'view_tier'),(77,'Can add customer',20,'add_customer'),(78,'Can change customer',20,'change_customer'),(79,'Can delete customer',20,'delete_customer'),(80,'Can view customer',20,'view_customer'),(81,'Can add date',21,'add_date'),(82,'Can change date',21,'change_date'),(83,'Can delete date',21,'delete_date'),(84,'Can view date',21,'view_date'),(85,'Can add unique seat booking',22,'add_uniqueseatbooking'),(86,'Can change unique seat booking',22,'change_uniqueseatbooking'),(87,'Can delete unique seat booking',22,'delete_uniqueseatbooking'),(88,'Can view unique seat booking',22,'view_uniqueseatbooking');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `password` varchar(128) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$870000$CHiPWLTeIWucYfKmFl0twk$vYqmXRRGXshrpmFaoQOOak1g3R7xUV4//HPNX7rVSfY=','2025-03-13 13:21:51.384170',1,'billy_56','','','billyboy18497@gmail.com',1,1,'2025-03-11 08:55:33.307832'),(6,'pbkdf2_sha256$870000$O3YRWOD51Uzpkxf1PQcbQv$zUkSlHIxhLXvVRspELCMpSv0wnw5lRtrEcXW8DegRl4=','2025-03-12 06:50:24.083453',0,'hello','','','hello@1',0,1,'2025-03-12 06:42:58.635117'),(8,'pbkdf2_sha256$870000$1bcZL1lwn6QDyUedTe71TY$dCOqk6XPyLZWvq325ybtDYYjDFcM47g9/YQuqh13fKs=','2025-03-12 06:57:42.938155',0,'hi1','','','hi@1',0,1,'2025-03-12 06:57:35.951941'),(9,'pbkdf2_sha256$870000$pHgPj6PzPI3xw4IYpNhsvi$hUAU5Ik3cgUChCGMKj+W5vLr4F3kINIu0M4PKQA48AM=',NULL,0,'hi2','','','hi@2',0,1,'2025-03-12 07:01:27.607773'),(10,'pbkdf2_sha256$870000$zNEtrvgizVlQeVgvIqe4Si$l58h0lsOMfGZxqYxIryVtG4G5LQ1VOVCMi1WB+z1xOI=',NULL,0,'hi3','','','hi@3',0,1,'2025-03-12 07:05:07.467400'),(11,'pbkdf2_sha256$870000$CbDhQTsWBVGXykbsfjJctL$h7j3W++K/+cyfk9fZIz1DmDOQaNjTa+SKmybBBAxaYs=','2025-03-12 07:23:59.148079',0,'hi4','','','hi@4',0,1,'2025-03-12 07:08:37.537828'),(12,'pbkdf2_sha256$870000$Tlhru9cnFjn24gxGLHlqnp$ydVn5kwx87Zvr2E/5ekMkbNF0TtUbj/GFg99ks94xM4=','2025-03-12 07:25:52.907198',0,'hi5','','','hi@5',0,1,'2025-03-12 07:25:47.561577'),(13,'pbkdf2_sha256$870000$AxnQ8jOFULypfEMIM4KkbO$Fyra7hVJiYtsUD1Aof+fTa8WsYbSq8XTH09pa15ZQTU=',NULL,0,'hi6','','','hi@6',0,1,'2025-03-12 07:29:41.607703'),(14,'pbkdf2_sha256$870000$7vgvEo0YOxGMnwArQnNJYT$2LZrPNWTsQ3fiXUttzTZYKOI7KWL4YEoPDNTkMoGl9E=','2025-03-13 06:44:43.617297',0,'hi8','','','hi@8',0,1,'2025-03-13 05:29:43.946569'),(15,'pbkdf2_sha256$870000$b69gKRFQgDWBOcbODmfyau$/IIwdPlopsIkOPNRFMWqeNMKur77pnm3/CFzzcbM+FY=','2025-03-13 14:23:07.981458',0,'hi9','','','hi@9',0,1,'2025-03-13 06:45:59.257108'),(16,'pbkdf2_sha256$870000$4JpEsZRsF2cfCjYFSwgXz3$fRpy6b6AMJsq4A7eoS2zuuEEKaAb/PbSmkrJMFgYEug=','2025-03-13 14:24:20.972797',0,'hi10','','','hi@10',0,1,'2025-03-13 14:24:16.544585');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$870000$CHiPWLTeIWucYfKmFl0twk$vYqmXRRGXshrpmFaoQOOak1g3R7xUV4//HPNX7rVSfY=','2025-03-14 13:09:03.212436',1,'billy_56','','','billyboy18497@gmail.com',1,1,'2025-03-11 08:55:33.307832'),(6,'pbkdf2_sha256$870000$O3YRWOD51Uzpkxf1PQcbQv$zUkSlHIxhLXvVRspELCMpSv0wnw5lRtrEcXW8DegRl4=','2025-03-12 06:50:24.083453',0,'hello','','','hello@1',0,1,'2025-03-12 06:42:58.635117'),(8,'pbkdf2_sha256$870000$1bcZL1lwn6QDyUedTe71TY$dCOqk6XPyLZWvq325ybtDYYjDFcM47g9/YQuqh13fKs=','2025-03-12 06:57:42.938155',0,'hi1','','','hi@1',0,1,'2025-03-12 06:57:35.951941'),(9,'pbkdf2_sha256$870000$pHgPj6PzPI3xw4IYpNhsvi$hUAU5Ik3cgUChCGMKj+W5vLr4F3kINIu0M4PKQA48AM=',NULL,0,'hi2','','','hi@2',0,1,'2025-03-12 07:01:27.607773'),(10,'pbkdf2_sha256$870000$zNEtrvgizVlQeVgvIqe4Si$l58h0lsOMfGZxqYxIryVtG4G5LQ1VOVCMi1WB+z1xOI=',NULL,0,'hi3','','','hi@3',0,1,'2025-03-12 07:05:07.467400'),(11,'pbkdf2_sha256$870000$CbDhQTsWBVGXykbsfjJctL$h7j3W++K/+cyfk9fZIz1DmDOQaNjTa+SKmybBBAxaYs=','2025-03-12 07:23:59.148079',0,'hi4','','','hi@4',0,1,'2025-03-12 07:08:37.537828'),(12,'pbkdf2_sha256$870000$Tlhru9cnFjn24gxGLHlqnp$ydVn5kwx87Zvr2E/5ekMkbNF0TtUbj/GFg99ks94xM4=','2025-03-12 07:25:52.907198',0,'hi5','','','hi@5',0,1,'2025-03-12 07:25:47.561577'),(13,'pbkdf2_sha256$870000$AxnQ8jOFULypfEMIM4KkbO$Fyra7hVJiYtsUD1Aof+fTa8WsYbSq8XTH09pa15ZQTU=',NULL,0,'hi6','','','hi@6',0,1,'2025-03-12 07:29:41.607703'),(14,'pbkdf2_sha256$870000$7vgvEo0YOxGMnwArQnNJYT$2LZrPNWTsQ3fiXUttzTZYKOI7KWL4YEoPDNTkMoGl9E=','2025-03-13 06:44:43.617297',0,'hi8','','','hi@8',0,1,'2025-03-13 05:29:43.946569'),(15,'pbkdf2_sha256$870000$b69gKRFQgDWBOcbODmfyau$/IIwdPlopsIkOPNRFMWqeNMKur77pnm3/CFzzcbM+FY=','2025-03-14 13:08:33.922050',0,'hi9','','','hi@9',0,1,'2025-03-13 06:45:59.257108'),(16,'pbkdf2_sha256$870000$4JpEsZRsF2cfCjYFSwgXz3$fRpy6b6AMJsq4A7eoS2zuuEEKaAb/PbSmkrJMFgYEug=','2025-03-13 14:24:20.972797',0,'hi10','','','hi@10',0,1,'2025-03-13 14:24:16.544585'),(17,'pbkdf2_sha256$870000$8yXK3E2bqv6A96rzUh8D04$JSl6RvOSH/F2aMD+iJcRma5cWiMSlm8rFT70JRR3mmE=','2025-03-17 11:41:54.459329',0,'hi11','','','hi@11',0,1,'2025-03-16 15:17:50.970233');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +161,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_groups` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -189,7 +189,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_user_permissions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -217,7 +217,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `booking_id` int NOT NULL,
   `customer_id` int NOT NULL,
@@ -251,7 +251,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_admin`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_admin` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `admin_role` varchar(50) NOT NULL,
@@ -277,7 +277,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_booking`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_booking` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `booking_date` datetime(6) NOT NULL,
@@ -295,7 +295,7 @@ CREATE TABLE `bookings_booking` (
   CONSTRAINT `bookings_booking_seat_id_764de9cf_fk_bookings_seat_id` FOREIGN KEY (`seat_id`) REFERENCES `bookings_seat` (`id`),
   CONSTRAINT `bookings_booking_show_id_10221a5a_fk_bookings_showtime_id` FOREIGN KEY (`show_id`) REFERENCES `bookings_showtime` (`id`),
   CONSTRAINT `bookings_booking_user_id_834dfc23_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,7 +304,7 @@ CREATE TABLE `bookings_booking` (
 
 LOCK TABLES `bookings_booking` WRITE;
 /*!40000 ALTER TABLE `bookings_booking` DISABLE KEYS */;
-INSERT INTO `bookings_booking` VALUES (4,'2025-03-13 14:23:20.878195','confirmed',7,29,144,NULL),(5,'2025-03-13 14:24:35.507378','confirmed',8,26,273,NULL);
+INSERT INTO `bookings_booking` VALUES (4,'2025-03-13 14:23:20.878195','confirmed',7,29,144,NULL),(5,'2025-03-13 14:24:35.507378','confirmed',8,26,273,NULL),(6,'2025-03-14 13:08:47.058270','confirmed',7,28,37,NULL);
 /*!40000 ALTER TABLE `bookings_booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,7 +314,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_cancellation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_cancellation` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `cancel_date` datetime(6) NOT NULL,
@@ -341,7 +341,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_city`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_city` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `city_name` varchar(255) NOT NULL,
@@ -365,7 +365,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_customer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `customer_name` varchar(255) NOT NULL,
@@ -377,7 +377,7 @@ CREATE TABLE `bookings_customer` (
   UNIQUE KEY `phone_no` (`phone_no`),
   UNIQUE KEY `uuser_id` (`user_id`),
   CONSTRAINT `bookings_customer_user_id_2ec5e30c_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -386,8 +386,33 @@ CREATE TABLE `bookings_customer` (
 
 LOCK TABLES `bookings_customer` WRITE;
 /*!40000 ALTER TABLE `bookings_customer` DISABLE KEYS */;
-INSERT INTO `bookings_customer` VALUES (1,'hi1','hi@1','',8),(3,'hi4','hi@4','4',11),(4,'hi5','hi@5','5',12),(6,'hi8','hi@8','8',14),(7,'hi9','hi@9','9',15),(8,'hi10','hi@10','10',16);
+INSERT INTO `bookings_customer` VALUES (1,'hi1','hi@1','',8),(3,'hi4','hi@4','4',11),(4,'hi5','hi@5','5',12),(6,'hi8','hi@8','8',14),(7,'hi9','hi@9','9',15),(8,'hi10','hi@10','10',16),(9,'hi11','hi@11','11',17);
 /*!40000 ALTER TABLE `bookings_customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bookings_date`
+--
+
+DROP TABLE IF EXISTS `bookings_date`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bookings_date` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `show_date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `show_date` (`show_date`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bookings_date`
+--
+
+LOCK TABLES `bookings_date` WRITE;
+/*!40000 ALTER TABLE `bookings_date` DISABLE KEYS */;
+INSERT INTO `bookings_date` VALUES (1,'2025-03-16'),(2,'2025-03-17'),(3,'2025-03-18'),(4,'2025-03-19'),(5,'2025-03-20'),(6,'2025-03-21'),(7,'2025-03-22'),(8,'2025-03-23'),(9,'2025-03-24'),(10,'2025-03-25'),(11,'2025-03-26'),(12,'2025-03-27'),(13,'2025-03-28'),(14,'2025-03-29'),(15,'2025-03-30'),(16,'2025-03-31'),(17,'2025-04-01'),(18,'2025-04-02'),(19,'2025-04-03'),(20,'2025-04-04'),(21,'2025-04-05'),(22,'2025-04-06'),(23,'2025-04-07'),(24,'2025-04-08'),(25,'2025-04-09'),(26,'2025-04-10'),(27,'2025-04-11'),(28,'2025-04-12'),(29,'2025-04-13'),(30,'2025-04-14');
+/*!40000 ALTER TABLE `bookings_date` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -396,7 +421,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_event` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `event_name` varchar(255) NOT NULL,
@@ -427,7 +452,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_organizer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_organizer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `organizer_name` varchar(255) NOT NULL,
@@ -452,7 +477,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_screen`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_screen` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `screen_name` varchar(100) NOT NULL,
@@ -481,17 +506,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_seat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_seat` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `seat_number` varchar(10) NOT NULL,
-  `status` varchar(20) NOT NULL,
   `tier_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `bookings_seat_seat_number_e4762d18_uniq` (`seat_number`),
   KEY `bookings_seat_tier_id_4ac26d2f_fk_bookings_tier_id` (`tier_id`),
   CONSTRAINT `bookings_seat_tier_id_4ac26d2f_fk_bookings_tier_id` FOREIGN KEY (`tier_id`) REFERENCES `bookings_tier` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -500,7 +524,7 @@ CREATE TABLE `bookings_seat` (
 
 LOCK TABLES `bookings_seat` WRITE;
 /*!40000 ALTER TABLE `bookings_seat` DISABLE KEYS */;
-INSERT INTO `bookings_seat` VALUES (4,'A1','booked',1),(5,'A2','booked',1),(6,'B1','booked',2),(25,'Z1','available',1),(26,'X2','booked',1),(27,'A3','available',1),(28,'Y1','available',2),(29,'B2','booked',2),(30,'B3','available',2),(31,'C1','available',3),(32,'C2','available',3),(33,'C3','available',3);
+INSERT INTO `bookings_seat` VALUES (4,'A1',1),(5,'A2',1),(6,'B1',2),(25,'Z1',1),(26,'X2',1),(27,'A3',1),(28,'Y1',2),(29,'B2',2),(30,'B3',2),(31,'C1',3),(32,'C2',3),(33,'C3',3),(34,'P1',1),(35,'P2',1),(36,'P3',1),(37,'P4',1),(38,'P5',1),(39,'P6',1),(40,'P7',1),(41,'P8',1),(42,'P9',1),(43,'P10',1),(44,'Q1',2),(45,'Q2',2),(46,'Q3',2),(47,'Q4',2),(48,'Q5',2),(49,'Q6',2),(50,'Q7',2),(51,'Q8',2),(52,'Q9',2),(53,'Q10',2),(54,'R1',3),(55,'R2',3),(56,'R3',3),(57,'R4',3),(58,'R5',3),(59,'R6',3),(60,'R7',3),(61,'R8',3),(62,'R9',3),(63,'R10',3),(64,'M1',4),(65,'M2',4),(66,'M3',4),(67,'M4',4),(68,'M5',4),(69,'M6',4),(70,'M7',4),(71,'M8',4),(72,'M9',4),(73,'M10',4),(74,'N1',5),(75,'N2',5),(76,'N3',5),(77,'N4',5),(78,'N5',5),(79,'N6',5),(80,'N7',5),(81,'N8',5),(82,'N9',5),(83,'N10',5);
 /*!40000 ALTER TABLE `bookings_seat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -510,7 +534,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_showtime`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_showtime` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `show_date` date NOT NULL,
@@ -543,7 +567,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_theatre`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_theatre` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `theatre_name` varchar(255) NOT NULL,
@@ -573,7 +597,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_tier`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_tier` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `tier_name` varchar(10) NOT NULL,
@@ -601,7 +625,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bookings_transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings_transaction` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `amount_paid` decimal(10,2) NOT NULL,
@@ -630,7 +654,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cancellations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cancellations` (
   `cancellation_id` int NOT NULL,
   `booking_id` int NOT NULL,
@@ -658,7 +682,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cities` (
   `city_id` int NOT NULL,
   `city_name` varchar(255) NOT NULL,
@@ -681,7 +705,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customers` (
   `customer_id` int NOT NULL,
   `customer_name` varchar(255) NOT NULL,
@@ -703,12 +727,36 @@ LOCK TABLES `customers` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dates`
+--
+
+DROP TABLE IF EXISTS `dates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dates` (
+  `date_id` int NOT NULL AUTO_INCREMENT,
+  `show_date` date DEFAULT NULL,
+  PRIMARY KEY (`date_id`),
+  UNIQUE KEY `show_date` (`show_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dates`
+--
+
+LOCK TABLES `dates` WRITE;
+/*!40000 ALTER TABLE `dates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `django_admin_log`
 --
 
 DROP TABLE IF EXISTS `django_admin_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_admin_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `action_time` datetime(6) NOT NULL,
@@ -743,14 +791,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_content_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `app_label` varchar(100) NOT NULL,
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -759,7 +807,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(16,'bookings','admin'),(11,'bookings','booking'),(15,'bookings','cancellation'),(17,'bookings','city'),(9,'bookings','customer'),(7,'bookings','event'),(12,'bookings','organizer'),(8,'bookings','screen'),(10,'bookings','seat'),(18,'bookings','showtime'),(14,'bookings','theatre'),(19,'bookings','tier'),(13,'bookings','transaction'),(5,'contenttypes','contenttype'),(6,'sessions','session'),(20,'users','customer');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(16,'bookings','admin'),(11,'bookings','booking'),(15,'bookings','cancellation'),(17,'bookings','city'),(9,'bookings','customer'),(21,'bookings','date'),(7,'bookings','event'),(12,'bookings','organizer'),(8,'bookings','screen'),(10,'bookings','seat'),(18,'bookings','showtime'),(14,'bookings','theatre'),(19,'bookings','tier'),(13,'bookings','transaction'),(22,'bookings','uniqueseatbooking'),(5,'contenttypes','contenttype'),(6,'sessions','session'),(20,'users','customer');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -769,14 +817,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_migrations` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -785,7 +833,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2025-03-10 17:45:36.631155'),(2,'auth','0001_initial','2025-03-10 17:45:37.088977'),(3,'admin','0001_initial','2025-03-10 17:45:37.208537'),(4,'admin','0002_logentry_remove_auto_add','2025-03-10 17:45:37.219870'),(5,'admin','0003_logentry_add_action_flag_choices','2025-03-10 17:45:37.230884'),(6,'contenttypes','0002_remove_content_type_name','2025-03-10 17:45:37.306927'),(7,'auth','0002_alter_permission_name_max_length','2025-03-10 17:45:37.355820'),(8,'auth','0003_alter_user_email_max_length','2025-03-10 17:45:37.380173'),(9,'auth','0004_alter_user_username_opts','2025-03-10 17:45:37.387773'),(10,'auth','0005_alter_user_last_login_null','2025-03-10 17:45:37.435596'),(11,'auth','0006_require_contenttypes_0002','2025-03-10 17:45:37.440971'),(12,'auth','0007_alter_validators_add_error_messages','2025-03-10 17:45:37.453421'),(13,'auth','0008_alter_user_username_max_length','2025-03-10 17:45:37.508532'),(14,'auth','0009_alter_user_last_name_max_length','2025-03-10 17:45:37.568157'),(15,'auth','0010_alter_group_name_max_length','2025-03-10 17:45:37.586951'),(16,'auth','0011_update_proxy_permissions','2025-03-10 17:45:37.595870'),(17,'auth','0012_alter_user_first_name_max_length','2025-03-10 17:45:37.647062'),(18,'sessions','0001_initial','2025-03-10 17:45:37.675005'),(19,'bookings','0001_initial','2025-03-11 08:44:11.048738'),(20,'bookings','0002_customer_uuser','2025-03-11 10:09:07.932668'),(21,'bookings','0003_rename_uuser_customer_user','2025-03-11 10:10:58.650048'),(22,'users','0001_initial','2025-03-11 10:15:06.217292'),(23,'users','0002_customer_user','2025-03-11 10:18:17.892621'),(24,'users','0003_alter_customer_user','2025-03-11 10:19:37.197965'),(25,'users','0004_alter_customer_phone_no','2025-03-11 10:24:24.122353'),(26,'bookings','0004_alter_seat_seat_number_alter_seat_status','2025-03-12 07:10:38.413600'),(27,'bookings','0005_alter_seat_tier','2025-03-12 07:23:43.968286'),(28,'bookings','0006_booking_user_alter_screen_theatre','2025-03-13 14:16:04.534219');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2025-03-10 17:45:36.631155'),(2,'auth','0001_initial','2025-03-10 17:45:37.088977'),(3,'admin','0001_initial','2025-03-10 17:45:37.208537'),(4,'admin','0002_logentry_remove_auto_add','2025-03-10 17:45:37.219870'),(5,'admin','0003_logentry_add_action_flag_choices','2025-03-10 17:45:37.230884'),(6,'contenttypes','0002_remove_content_type_name','2025-03-10 17:45:37.306927'),(7,'auth','0002_alter_permission_name_max_length','2025-03-10 17:45:37.355820'),(8,'auth','0003_alter_user_email_max_length','2025-03-10 17:45:37.380173'),(9,'auth','0004_alter_user_username_opts','2025-03-10 17:45:37.387773'),(10,'auth','0005_alter_user_last_login_null','2025-03-10 17:45:37.435596'),(11,'auth','0006_require_contenttypes_0002','2025-03-10 17:45:37.440971'),(12,'auth','0007_alter_validators_add_error_messages','2025-03-10 17:45:37.453421'),(13,'auth','0008_alter_user_username_max_length','2025-03-10 17:45:37.508532'),(14,'auth','0009_alter_user_last_name_max_length','2025-03-10 17:45:37.568157'),(15,'auth','0010_alter_group_name_max_length','2025-03-10 17:45:37.586951'),(16,'auth','0011_update_proxy_permissions','2025-03-10 17:45:37.595870'),(17,'auth','0012_alter_user_first_name_max_length','2025-03-10 17:45:37.647062'),(18,'sessions','0001_initial','2025-03-10 17:45:37.675005'),(19,'bookings','0001_initial','2025-03-11 08:44:11.048738'),(20,'bookings','0002_customer_uuser','2025-03-11 10:09:07.932668'),(21,'bookings','0003_rename_uuser_customer_user','2025-03-11 10:10:58.650048'),(22,'users','0001_initial','2025-03-11 10:15:06.217292'),(23,'users','0002_customer_user','2025-03-11 10:18:17.892621'),(24,'users','0003_alter_customer_user','2025-03-11 10:19:37.197965'),(25,'users','0004_alter_customer_phone_no','2025-03-11 10:24:24.122353'),(26,'bookings','0004_alter_seat_seat_number_alter_seat_status','2025-03-12 07:10:38.413600'),(27,'bookings','0005_alter_seat_tier','2025-03-12 07:23:43.968286'),(28,'bookings','0006_booking_user_alter_screen_theatre','2025-03-13 14:16:04.534219'),(29,'bookings','0002_alter_uniqueseatbooking_unique_together_and_more','2025-03-16 15:53:59.917101'),(30,'bookings','0003_rename_showtime_uniqueseatbooking_show','2025-03-17 10:59:26.210528'),(31,'bookings','0004_alter_uniqueseatbooking_show','2025-03-17 10:59:26.214759'),(32,'bookings','0005_remove_uniqueseatbooking_city_and_more','2025-03-17 11:31:53.511866'),(33,'bookings','0006_auto_20250317_1131','2025-03-17 11:31:53.515055');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -795,7 +843,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
@@ -811,7 +859,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('cjir79aq87gk06vnzy4hb18y176i3lg3','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsiVT:O86pCk9byfqLkzQcLAJdDf_Kf9Djv49NrfxMbpvOW3c','2025-03-27 13:21:51.389943'),('f8ovug523h5wstzs77egb7rseyeh5r32','.eJxVjDsOwjAQBe_iGllm8S-U9DmDtbu2cQDZUpxUiLuTSCmgnZn33iLgupSw9jSHKYqrMOL0ywj5meou4gPrvUludZknknsiD9vl2GJ63Y7276BgL9vaMhFH6xQDODuwSRmy16iGs9UaAY2n6LUDJNIXcJS8QSCfMW8sK_H5AvKBOF4:1trwt6:X1_U6sWGOR9lbJBJnUNJ1f6ECfmP_HrlYR-q_9atYM8','2025-03-25 10:31:04.874317'),('mfv4iaq3ifkq2tyw1ju9j363a1wkfi1a','.eJxVjsEKwjAQRP8lZwmJmyaNR-9-Q9jsrrZaWmjSg4j_bos96G2YNzzmpRIutUtLkTn1rE7KenX4LTPSQ8aN8B3H26RpGuvcZ71N9E6Lvkwsw3nf_gk6LN3mdSAmRmxNAIAr5sZyazGHIETgDTow4hHX1GTHbqWeIdDReoqhtau0yCBUhRP19fl9G9X7A1UzP0g:1tsjTz:gp75FLVM8yg4WYrVfdaj0DVZAIDF3HIlemQBiYJT5_s','2025-03-27 14:24:23.468229'),('xxbwsigeds72y5sc98fjsalnvkmffpzh','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsdc9:DFJ0O1FJmydTd5VUjFltXB3pFHKmbsP9emP8k3prK3g','2025-03-27 08:08:25.771556'),('zkmb87ucj9pzss30ahjrpqbnl4tfgz4a','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsGNq:Z4S6HkNHUobvLc7Of3z4abSS32JCHN51Fyts5PiU3CE','2025-03-26 07:20:06.602341');
+INSERT INTO `django_session` VALUES ('ca1w80ochs8jyrn9y4qirbbkzrohu78s','.eJxVjsEOgjAQRP-lZ9Ok3YWCR-9-Q7PsbgUlkNByMMZ_FyIHvc6beZmXibSWPq5ZlziIORsXzOk37IgfOu1E7jTdZsvzVJahs3vFHjTb6yw6Xo7un6Cn3G_rtnItKgpoIkkJxSUONbKHDtAhMTUK3rcMwUMtAUAIKkTwGBga3KRZR-WiEnkoz-9bNO8PdDM_Vg:1tu8rd:MaW-qCjHzluQ4r3Z6LZS4k14t504EhCl1HaZjr3v23I','2025-03-31 11:42:37.555930'),('cjir79aq87gk06vnzy4hb18y176i3lg3','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsiVT:O86pCk9byfqLkzQcLAJdDf_Kf9Djv49NrfxMbpvOW3c','2025-03-27 13:21:51.389943'),('eogiwy9d6wp8qozm9mv7jelqlbgby7z8','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tt4md:YeU9VfS_D-iS9403atdtTgVETfGcLxHEnsIjmbdLrCM','2025-03-28 13:09:03.217432'),('f8ovug523h5wstzs77egb7rseyeh5r32','.eJxVjDsOwjAQBe_iGllm8S-U9DmDtbu2cQDZUpxUiLuTSCmgnZn33iLgupSw9jSHKYqrMOL0ywj5meou4gPrvUludZknknsiD9vl2GJ63Y7276BgL9vaMhFH6xQDODuwSRmy16iGs9UaAY2n6LUDJNIXcJS8QSCfMW8sK_H5AvKBOF4:1trwt6:X1_U6sWGOR9lbJBJnUNJ1f6ECfmP_HrlYR-q_9atYM8','2025-03-25 10:31:04.874317'),('mfv4iaq3ifkq2tyw1ju9j363a1wkfi1a','.eJxVjsEKwjAQRP8lZwmJmyaNR-9-Q9jsrrZaWmjSg4j_bos96G2YNzzmpRIutUtLkTn1rE7KenX4LTPSQ8aN8B3H26RpGuvcZ71N9E6Lvkwsw3nf_gk6LN3mdSAmRmxNAIAr5sZyazGHIETgDTow4hHX1GTHbqWeIdDReoqhtau0yCBUhRP19fl9G9X7A1UzP0g:1tsjTz:gp75FLVM8yg4WYrVfdaj0DVZAIDF3HIlemQBiYJT5_s','2025-03-27 14:24:23.468229'),('xxbwsigeds72y5sc98fjsalnvkmffpzh','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsdc9:DFJ0O1FJmydTd5VUjFltXB3pFHKmbsP9emP8k3prK3g','2025-03-27 08:08:25.771556'),('zkmb87ucj9pzss30ahjrpqbnl4tfgz4a','.eJxVjEEOwiAQRe_C2hAoyKBL9z0DGWZAqgaS0q6Md7dNutDtf-_9twi4LiWsPc1hYnEVWpx-t4j0THUH_MB6b5JaXeYpyl2RB-1ybJxet8P9OyjYy1ZTZB48GnDkY86YLDptNZB1SilvMidQGhU68NacN24yAgxIni-skvh8AfrvOFQ:1tsGNq:Z4S6HkNHUobvLc7Of3z4abSS32JCHN51Fyts5PiU3CE','2025-03-26 07:20:06.602341');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -821,7 +869,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
   `event_id` int NOT NULL,
   `event_name` varchar(255) NOT NULL,
@@ -852,7 +900,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `organizers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `organizers` (
   `organizer_id` int NOT NULL,
   `organizer_name` varchar(255) NOT NULL,
@@ -876,7 +924,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `screens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `screens` (
   `screen_id` int NOT NULL,
   `theatre_id` int NOT NULL,
@@ -904,7 +952,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seats` (
   `seat_id` int NOT NULL,
   `tier_id` int NOT NULL,
@@ -933,7 +981,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `showtimes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `showtimes` (
   `show_id` int NOT NULL,
   `event_id` int NOT NULL,
@@ -965,7 +1013,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `theatres`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `theatres` (
   `theatre_id` int NOT NULL,
   `city_id` int NOT NULL,
@@ -994,7 +1042,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tiers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tiers` (
   `tier_id` int NOT NULL,
   `screen_id` int NOT NULL,
@@ -1023,7 +1071,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transactions` (
   `transaction_id` int NOT NULL,
   `booking_id` int NOT NULL,
@@ -1048,12 +1096,44 @@ LOCK TABLES `transactions` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `unique_seat_booking`
+--
+
+DROP TABLE IF EXISTS `unique_seat_booking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `unique_seat_booking` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` varchar(20) NOT NULL,
+  `unique_seat_id` varchar(255) DEFAULT NULL,
+  `city_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `screen_id` int NOT NULL,
+  `seat_id` int NOT NULL,
+  `show_id` int NOT NULL,
+  `tier_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_seat_id` (`unique_seat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unique_seat_booking`
+--
+
+LOCK TABLES `unique_seat_booking` WRITE;
+/*!40000 ALTER TABLE `unique_seat_booking` DISABLE KEYS */;
+INSERT INTO `unique_seat_booking` VALUES (5,'2025-03-22','6-None-None-29-173-2025-03-22-2-48',6,29,1,48,173,2);
+/*!40000 ALTER TABLE `unique_seat_booking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users_customer`
 --
 
 DROP TABLE IF EXISTS `users_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users_customer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `customer_name` varchar(255) NOT NULL,
@@ -1064,7 +1144,7 @@ CREATE TABLE `users_customer` (
   UNIQUE KEY `email_id` (`email_id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `users_customer_user_id_a09bb4be_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1073,7 +1153,7 @@ CREATE TABLE `users_customer` (
 
 LOCK TABLES `users_customer` WRITE;
 /*!40000 ALTER TABLE `users_customer` DISABLE KEYS */;
-INSERT INTO `users_customer` VALUES (1,'billy_56','billyboy18497@gmail.com',NULL,1),(6,'hello','hello@1',NULL,6),(7,'hi1','hi@1',NULL,8),(8,'hi2','hi@2',NULL,9),(9,'hi3','hi@3',NULL,10),(10,'hi4','hi@4',NULL,11),(11,'hi5','hi@5',NULL,12),(12,'hi6','hi@6',NULL,13),(13,'hi8','hi@8',NULL,14),(14,'hi9','hi@9',NULL,15),(15,'hi10','hi@10',NULL,16);
+INSERT INTO `users_customer` VALUES (1,'billy_56','billyboy18497@gmail.com',NULL,1),(6,'hello','hello@1',NULL,6),(7,'hi1','hi@1',NULL,8),(8,'hi2','hi@2',NULL,9),(9,'hi3','hi@3',NULL,10),(10,'hi4','hi@4',NULL,11),(11,'hi5','hi@5',NULL,12),(12,'hi6','hi@6',NULL,13),(13,'hi8','hi@8',NULL,14),(14,'hi9','hi@9',NULL,15),(15,'hi10','hi@10',NULL,16),(16,'hi11','hi@11',NULL,17);
 /*!40000 ALTER TABLE `users_customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1086,4 +1166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-14 11:28:10
+-- Dump completed on 2025-03-17 17:47:15

@@ -111,7 +111,7 @@ DATABASES = {
         "NAME": "Booket_Ticking",  # Your database name
         "USER": "root",  # Replace with your MySQL username
         "PASSWORD": "your_new_password",  # Replace with your MySQL password
-        "HOST": "localhost",  # Change if using a remote database
+        "HOST": "127.0.0.1",  # Change if using a remote database
         "PORT": "3306",  # MySQL default port
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",

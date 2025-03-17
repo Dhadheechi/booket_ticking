@@ -6,180 +6,201 @@
     <title>Book Ticket</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- ✅ Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .booking-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Book Your Ticket</h1>
+    <div class="container">
+        <div class="booking-container">
+            <h2 class="text-center mb-4">Book Your Ticket</h2>
 
-    <form id="booking-form" action="" method="POST">
-        {% csrf_token %}
+            <form id="booking-form" action="" method="POST">
+                {% csrf_token %}
 
-        <!-- Hidden City Field (Preselected) -->
-        <input type="hidden" name="selected_city" value="{{ selected_city_id }}">
+                <input type="hidden" name="selected_city" value="{{ selected_city_id }}">
 
-        <!-- Theatre Selection -->
-        <label for="theatre">Select Theatre:</label>
-        <select name="theatre" id="theatre-select" required>
-            <option value="">-- Select a theatre --</option>
-            {% for theatre in theatres %}
-                <option value="{{ theatre.id }}">{{ theatre.theatre_name }}</option>
-            {% endfor %}
-        </select>
+                <div class="mb-3">
+                    <label class="form-label">Select Theatre:</label>
+                    <select name="theatre" id="theatre-select" class="form-select" required>
+                        <option value="">-- Select a theatre --</option>
+                        {% for theatre in theatres %}
+                            <option value="{{ theatre.id }}">{{ theatre.theatre_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <!-- Event Selection -->
-        <label for="event">Select Event:</label>
-        <select name="event" id="event-select" required disabled>
-            <option value="">-- Select an event --</option>
-            {% for event in events %}
-                <option value="{{ event.id }}">{{ event.event_name }}</option>
-            {% endfor %}
-        </select>
+                <div class="mb-3">
+                    <label class="form-label">Select Event:</label>
+                    <select name="event" id="event-select" class="form-select" required disabled>
+                        <option value="">-- Select an event --</option>
+                        {% for event in events %}
+                            <option value="{{ event.id }}">{{ event.event_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <!-- Show Selection -->
-        <label for="show">Select Show:</label>
-        <select name="show" id="show-select" required disabled>
-            <option value="">-- Select a show --</option>
-            {% for show in shows %}
-                <option value="{{ show.id }}" data-theatre="{{ show.screen.theatre.id }}" data-event="{{ show.event.id }}">
-                    {{ show.event.event_name }} - {{ show.slot_time }}
-                </option>
-            {% endfor %}
-        </select>
+                <div class="mb-3">
+                    <label class="form-label">Select Date:</label>
+                    <input type="date" id="date-input" name="date" class="form-control" required>
+                </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Select Show:</label>
+                    <select name="show" id="show-select" class="form-select" required disabled>
+                        <option value="">-- Select a show --</option>
+                        {% for show in shows %}
+                            <option value="{{ show.id }}" data-theatre="{{ show.screen.theatre.id }}" data-event="{{ show.event.id }}">
+                                {{ show.event.event_name }} - {{ show.slot_time }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <label for="tier">Select Tier:</label>
-        <select name="tier" id="tier-select" required disabled>
-            <option value="">-- Select a tier --</option>
-            {% for tier in tiers %}
-                <option value="{{ tier.id }}">{{ tier.tier_name }} - ₹{{ tier.price }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="seat">Select Seat:</label>
-        <select name="seat" id="seat-select" required disabled>
-            <option value="">-- Select a seat --</option>
-        </select>
+                <div class="mb-3">
+                    <label class="form-label">Select Tier:</label>
+                    <select name="tier" id="tier-select" class="form-select" required disabled>
+                        <option value="">-- Select a tier --</option>
+                        {% for tier in tiers %}
+                            <option value="{{ tier.id }}">{{ tier.tier_name }} - ₹{{ tier.price }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Select Seat:</label>
+                    <select name="seat" id="seat-select" class="form-select" required disabled>
+                        <option value="">-- Select a seat --</option>
+                    </select>
+                </div>
 
-        <button type="submit" id="book-now" >Book Now</button>
-    </form>
+                <button type="submit" id="book-now" class="btn btn-primary w-100">Book Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-        const theatreSelect = document.getElementById("theatre-select");
-        const eventSelect = document.getElementById("event-select");
-        const showSelect = document.getElementById("show-select");
-        const seatSelectionDiv = document.getElementById("seat-selection");
-        const seatSelect = document.getElementById("seat-select");
-        const bookNowButton = document.getElementById("book-now");
-        const tierSelect = document.getElementById("tier-select"); // Ensure this ID exists
+            const theatreSelect = document.getElementById("theatre-select");
+            const eventSelect = document.getElementById("event-select");
+            const showSelect = document.getElementById("show-select");
+            const seatSelect = document.getElementById("seat-select");
+            const tierSelect = document.getElementById("tier-select");
 
+            theatreSelect.addEventListener("change", function() {
+                if (this.value) {
+                    eventSelect.disabled = false;
+                    fetchEvents(this.value);
+                } else {
+                    eventSelect.disabled = true;
+                    showSelect.disabled = true;
+                    tierSelect.disabled = true;
+                    seatSelect.disabled = true;
+                }
+            });
 
-        // Enable Event Dropdown when a Theatre is selected
-        theatreSelect.addEventListener("change", function() {
-            if (this.value) {
-                eventSelect.disabled = false;
-                fetchEvents(this.value);
-            } else {
-                eventSelect.disabled = true;
-                showSelect.disabled = true;
-                seatSelectionDiv.style.display = "none";
+            function fetchEvents(theatreId) {
+                fetch(`/book/get-events/?theatre_id=${theatreId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        eventSelect.innerHTML = '<option value="">-- Select an event --</option>';
+                        data.events.forEach(event => {
+                            eventSelect.innerHTML += `<option value="${event.id}">${event.name}</option>`;
+                        });
+                    });
+            }
+
+            eventSelect.addEventListener("change", function() {
+                if (this.value) {
+                    showSelect.disabled = false;
+                    fetchShows(theatreSelect.value, this.value);
+                } else {
+                    showSelect.disabled = true;
+                    tierSelect.disabled = true;
+                    seatSelect.disabled = true;
+                }
+            });
+
+            function fetchShows(theatreId, eventId) {
+                fetch(`/book/get-shows/?theatre_id=${theatreId}&event_id=${eventId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        showSelect.innerHTML = '<option value="">-- Select a show --</option>';
+                        data.shows.forEach(show => {
+                            showSelect.innerHTML += `<option value="${show.id}">${show.time}</option>`;
+                        });
+                    });
+            }
+
+            showSelect.addEventListener("change", function () {
+                if (this.value) {
+                    tierSelect.disabled = false;
+                    fetchTiers(this.value);
+                } else {
+                    tierSelect.disabled = true;
+                    seatSelect.disabled = true;
+                }
+            });
+
+            function fetchTiers(showId) {
+                fetch(`/book/get-tiers/?show_id=${showId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        tierSelect.innerHTML = '<option value="">-- Select a tier --</option>';
+                        data.tiers.forEach(tier => {
+                            tierSelect.innerHTML += `<option value="${tier.id}">${tier.name} - ₹${tier.price}</option>`;
+                        });
+                    });
+            }
+
+            tierSelect.addEventListener("change", function() {
+                if (this.value) {
+                    seatSelect.disabled = false;
+                    fetchSeats(this.value);
+                } else {
+                    seatSelect.disabled = true;
+                }
+            });
+
+            function fetchSeats(tierId) {
+                const showId = document.getElementById("show-select").value;
+                const selectedDate = document.getElementById("date-input").value;
+
+                if (!showId || !selectedDate) {
+                    console.error("Show ID or Date is missing");
+                    return;
+                }
+
+                fetch(`/book/get-seats/?tier_id=${tierId}&show_id=${showId}&date=${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        seatSelect.innerHTML = '<option value="">-- Select a seat --</option>';
+                        data.seats.forEach(seat => {
+                            seatSelect.innerHTML += `<option value="${seat.id}">${seat.seat_number}</option>`;
+                        });
+                    })
+                    .catch(error => console.error("Error fetching seats:", error));
             }
         });
-
-        // Fetch events for selected theatre
-        function fetchEvents(theatreId) {
-            fetch(`/book/get-events/?theatre_id=${theatreId}`)
-                .then(response => response.json())
-                .then(data => {
-                    eventSelect.innerHTML = '<option value="">-- Select an event --</option>';
-                    data.events.forEach(event => {
-                        eventSelect.innerHTML += `<option value="${event.id}">${event.name}</option>`;
-                    });
-                });
-        }
-
-        // Enable Show Dropdown when an Event is selected
-                // Enable Show Dropdown when an Event is selected
-        eventSelect.addEventListener("change", function() {
-            if (this.value) {
-                showSelect.disabled = false;
-                fetchShows(theatreSelect.value, this.value);
-            } else {
-                showSelect.disabled = true;
-                seatSelectionDiv.style.display = "none";
-            }
-        });
-
-        // Fetch showtimes for selected event using AJAX
-        function fetchShows(theatreId, eventId) {
-            fetch(`/book/get-shows/?theatre_id=${theatreId}&event_id=${eventId}`)
-                .then(response => response.json())
-                .then(data => {
-                    showSelect.innerHTML = '<option value="">-- Select a showtime --</option>';
-                    data.shows.forEach(show => {
-                        showSelect.innerHTML += `<option value="${show.id}">${show.time}</option>`;
-                    });
-                });
-        }
-
-        // Enable Tier Dropdown when a Show is selected
-        showSelect.addEventListener("change", function () {
-            if (this.value) {
-                tierSelect.disabled = false;
-                fetchTiers(this.value);
-            } else {
-                tierSelect.disabled = true;
-                tierSelect.innerHTML = '<option value="">-- Select a tier --</option>';
-                seatSelect.disabled = true;
-                seatSelect.innerHTML = '<option value="">-- Select a seat --</option>';
-            }
-        });
-
-        // Fetch available tiers for selected show
-        function fetchTiers(showId) {
-            fetch(`/book/get-tiers/?show_id=${showId}`)
-                .then(response => response.json())
-                .then(data => {
-                    tierSelect.innerHTML = '<option value="">-- Select a tier --</option>';
-                    data.tiers.forEach(tier => {
-                        tierSelect.innerHTML += `<option value="${tier.id}">${tier.name} - ₹${tier.price}</option>`;
-                    });
-                })
-                .catch(error => console.error("Error fetching tiers:", error));
-        }
-
-        // Enable Seat Dropdown when a Tier is selected
-        tierSelect.addEventListener("change", function() {
-            if (this.value) {
-                seatSelect.disabled = false;
-                fetchSeats(this.value);
-            } else {
-                seatSelect.disabled = true;
-                seatSelect.innerHTML = '<option value="">-- Select a seat --</option>';
-            }
-        });
-
-        // Fetch available seats for selected tier using AJAX
-        function fetchSeats(tierId) {
-            fetch(`/book/get-seats/?tier_id=${tierId}`)
-                .then(response => response.json())
-                .then(data => {
-                    seatSelect.innerHTML = '<option value="">-- Select a seat --</option>';
-                    data.seats.forEach(seat => {
-                        seatSelect.innerHTML += `<option value="${seat.id}">${seat.seat_number}</option>`;
-                    });
-                })
-                .catch(error => console.error("Error fetching seats:", error));
-        }
-
-
-
-    });
-
     </script>
-    
-    
-    
+
 </body>
 </html>

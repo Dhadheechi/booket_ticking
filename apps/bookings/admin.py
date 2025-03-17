@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import *
-from .models import Customer  # Import your Customer model
+from .models import City, Theatre, Screen, Event, Booking, Transaction, Customer, Seat, Tier
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'city_name')  # Use 'id' instead of 'city_id'
+    list_display = ('id', 'city_name')
     search_fields = ('city_name',)
 
 @admin.register(Theatre)
@@ -25,8 +24,11 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'show', 'seat', 'status', 'booking_date')  # Use 'status' instead of 'stat'
-    list_filter = ('status', 'booking_date')  # 'status' should be a field in your model
+    # list_display = ('id', 'customer', 'show', 'seat', 'booking_date')  # Removed 'status'
+    # list_filter = ('booking_date',)  # Removed 'status'
+    list_display = ('id', 'customer', 'show', 'seat')  # Removed 'status'
+    #list_filter = ('booking_date',)  # Removed 'status'
+
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
@@ -38,17 +40,31 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer_name', 'email_id', 'phone_no')
     search_fields = ('customer_name', 'email_id')
 
-from django.contrib import admin
-from .models import Seat, Tier
-
 @admin.register(Seat)
 class SeatAdmin(admin.ModelAdmin):
-    list_display = ('seat_number', 'status', 'tier')
-    list_filter = ('status', 'tier')
+    list_display = ('id', 'seat_number', 'tier')
+    list_filter = ('tier',)
     search_fields = ('seat_number',)
 
 @admin.register(Tier)
 class TierAdmin(admin.ModelAdmin):
-    list_display = ('tier_name', 'price', 'screen')
+    list_display = ('id', 'tier_name', 'price', 'screen')
     list_filter = ('screen',)
     search_fields = ('tier_name',)
+
+from django.contrib import admin
+from .models import City, Theatre, Screen, Event, Booking, Transaction, Customer, Seat, Tier, UniqueSeatBooking, Date
+
+@admin.register(Date)  # ✅ Register Date Model
+class DateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'show_date')
+    search_fields = ('show_date',)
+
+from django.contrib import admin
+from .models import UniqueSeatBooking
+
+@admin.register(UniqueSeatBooking)
+class UniqueSeatBookingAdmin(admin.ModelAdmin):
+    list_display = ['unique_seat_id', 'city_id', 'screen_id', 'event_id', 'date', 'show_id', 'tier_id', 'seat_id']
+    list_filter = ['city_id', 'screen_id', 'event_id', 'date', 'show_id', 'tier_id']
+    search_fields = ['unique_seat_id']

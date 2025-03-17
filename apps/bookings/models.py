@@ -74,17 +74,12 @@ class Tier(models.Model):
         return f"{self.screen.screen_name} - {self.tier_name}"
 
 class Seat(models.Model):
-    STATUS_CHOICES = [
-        ('available', 'Available'),
-        ('booked', 'Booked'),
-    ]
-    
     seat_number = models.CharField(max_length=10, unique=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE, related_name="seats")
 
     def __str__(self):
-        return f"{self.seat_number} ({self.status})"
+        return f"Seat {self.seat_number} - {self.tier.tier_name}"
+
 
 
 from django.contrib.auth.models import User
@@ -110,7 +105,7 @@ class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     show = models.ForeignKey(Showtime, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
-    booking_date = models.DateTimeField(auto_now_add=True)
+    # booking_date = models.DateTimeField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __str__(self):
@@ -146,3 +141,27 @@ class Admin(models.Model):
 
     def __str__(self):
         return f"Admin: {self.user.customer_name}"
+
+from django.db import models
+
+class Date(models.Model):  # ✅ New Date Model
+    show_date = models.DateField(unique=True)
+
+    def __str__(self):
+        return str(self.show_date)
+
+class UniqueSeatBooking(models.Model):
+    unique_seat_id = models.CharField(max_length=255, unique=True)
+    city_id = models.IntegerField(default=1)  # Use a valid city ID from your database
+    screen_id = models.IntegerField(default=1)  # Use a valid screen ID
+    event_id = models.IntegerField(default=1)  # Use a valid event ID
+    show_id = models.IntegerField(db_column="show_id", default=1)  # Use a valid show ID
+    date = models.CharField(max_length=20, default="2025-03-17")  # Default date
+    seat_id = models.IntegerField(default=1)  # Use a valid seat ID
+    tier_id = models.IntegerField(default=1)  # Use a valid tier ID
+
+    class Meta:
+        db_table = "unique_seat_booking"
+
+    def __str__(self):
+        return f"Booking {self.unique_seat_id}"
