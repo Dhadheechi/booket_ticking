@@ -105,7 +105,7 @@ class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     show = models.ForeignKey(Showtime, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
-    # booking_date = models.DateTimeField()
+    booking_date = models.DateTimeField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __str__(self):

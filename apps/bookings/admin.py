@@ -24,10 +24,10 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    # list_display = ('id', 'customer', 'show', 'seat', 'booking_date')  # Removed 'status'
-    # list_filter = ('booking_date',)  # Removed 'status'
-    list_display = ('id', 'customer', 'show', 'seat')  # Removed 'status'
-    #list_filter = ('booking_date',)  # Removed 'status'
+    list_display = ('id', 'customer', 'show', 'seat', 'booking_date')  # Removed 'status'
+    list_filter = ('booking_date',)  # Removed 'status'
+    # list_display = ('id', 'customer', 'show', 'seat')  # Removed 'status'
+    # #list_filter = ('booking_date',)  # Removed 'status'
 
 
 @admin.register(Transaction)

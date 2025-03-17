@@ -125,8 +125,11 @@ def book_ticket(request):
         show_id = request.POST.get("show")
         seat_id = request.POST.get("seat")
         tier_id = request.POST.get("tier")
-        screen_id = request.POST.get("screen")  # Ensure this is passed
+        screen_id = request.POST.get("theatre")  # Ensure this is passed
         date = request.POST.get("date")
+        theatre_id = request.POST.get("theatre")
+        
+
         
         if not (show_id and seat_id and tier_id and date):
             return JsonResponse({"status": "error", "message": "Missing show, seat, tier, or date."}, status=400)
@@ -142,7 +145,7 @@ def book_ticket(request):
         except (Showtime.DoesNotExist, Customer.DoesNotExist):
             return JsonResponse({"status": "error", "message": "Invalid show or customer not found."}, status=400)
         
-        unique_seat_id = f"{selected_city_id}-{selected_theatre_id}-{screen_id}-{event_instance.id}-{show_id}-{date}-{tier_id}-{seat_id}"
+        unique_seat_id = f"{selected_city_id}-{theatre_id}-{event_instance.id}-{show_id}-{date}-{tier_id}-{seat_id}"
         
         if UniqueSeatBooking.objects.using('default').filter(unique_seat_id=unique_seat_id).exists():
             return JsonResponse({"status": "error", "message": "Seat is already booked."}, status=400)
@@ -159,7 +162,7 @@ def book_ticket(request):
             tier_id=int(tier_id),  # Convert to integer
             show_id=int(show_id),  # Convert to integer
             event_id=event_instance.id,  # Use the ID, not the object
-            #screen_id=int(screen_id),  # Convert to integer
+            screen_id=int(screen_id),  # Convert to integer
             city_id=int(selected_city_id),  # Convert to integer
             date=date,  # Date string is fine
         )
@@ -170,7 +173,7 @@ def book_ticket(request):
             show_id=show_id,
             seat_id=seat_id,
             status="confirmed",
-            date=selected_date
+            booking_date=date
         )
 
         return JsonResponse({"status": "success", "booking_id": booking.id})
