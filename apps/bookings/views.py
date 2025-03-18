@@ -214,6 +214,8 @@ def confirm_booking(request, unique_seat_id):
     theatre = screen.theatre
     city = get_object_or_404(City, id=unique_booking.city_id)
     
+    # return redirect(reverse("initiate_payment", kwargs={"booking_id": unique_booking.id}))
+
     context = {
         "unique_booking": unique_booking,
         "seat": seat,
@@ -528,3 +530,80 @@ def download_booking_pdf(request, unique_seat_id):
     p.showPage()
     p.save()
     return response
+
+# from .models import Transaction
+# from django.db import transaction
+# from django.utils.timezone import now
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Booking, UniqueSeatBooking, Transaction
+from django.contrib import messages
+from django.urls import reverse
+import uuid  # To generate unique transaction IDs
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+import uuid
+from .models import Booking, Transaction
+
+from django.urls import reverse
+
+@login_required
+def initiate_payment(request, booking_id):
+    try:
+        # Directly fetch booking using booking_id (no need to split)
+        booking = get_object_or_404(Booking, id=booking_id, customer__user=request.user)
+
+        # Create a transaction record with initial pending status
+        transaction = Transaction.objects.create(
+            booking=booking,
+            amount_paid=booking.seat.tier.price,  # Assuming this exists
+            payment_method="Online",  # Adjust if necessary
+            payment_status=Transaction.PENDING
+        )
+
+        return render(request, "bookings/payment_page.html", {
+            "transaction": transaction,
+            "booking": booking
+        })
+
+    except Booking.DoesNotExist:
+        messages.error(request, "Booking not found.")
+        return redirect('home')
+
+
+
+
+from django.urls import reverse
+
+@login_required
+def process_payment(request):
+    if request.method == "POST":
+        transaction_id = request.POST.get("transaction_id")
+        otp_entered = request.POST.get("otp")
+
+        transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
+
+        # ✅ Mock OTP Validation (Assume "123456" is the correct OTP)
+        if otp_entered != "000000":
+            transaction.payment_status = Transaction.SUCCESS
+            transaction.save()
+
+            messages.success(request, "Payment successful! Your booking is confirmed.")
+            success_url = reverse("booking_success", kwargs={"booking_id": transaction.booking.id})
+            return redirect(success_url)
+        else:
+            transaction.payment_status = Transaction.FAILED
+            transaction.save()
+
+            # 🚨 Rollback: Delete booking and free seat
+            transaction.booking.delete()
+            UniqueSeatBooking.objects.filter(unique_seat_id=transaction.booking.unique_seat_id).delete()
+
+            messages.error(request, "Payment failed. Please try again.")
+            return redirect("booking_failed")
+
+    return redirect("home")

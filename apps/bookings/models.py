@@ -110,12 +110,24 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.customer.customer_name} - {self.show.event.event_name}"
+    
+import uuid
+
 
 class Transaction(models.Model):
+    FAILED  = 'failed'
+    SUCCESS = 'success'
+    PENDING = 'pending'
+    PAYMENT_STATUS_CHOICES = [
+        (FAILED, 'Failed'),
+        (SUCCESS, 'Success'),
+        (PENDING, 'Pending')
+    ]
+    transaction_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # ✅ Added transaction_id
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50)
-    payment_status = models.CharField(max_length=20)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES)
     transaction_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

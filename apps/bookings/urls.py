@@ -29,8 +29,11 @@ urlpatterns = [
     path("get-tiers/", get_tiers, name="get_tiers"),
     path('book/confirm/<str:unique_seat_id>/', views.confirm_booking, name='confirm_booking'),
     path("book/confirm/<path:unique_seat_id>/download/", download_booking_pdf, name="download_booking_pdf"),
+    path("book/payment/<int:booking_id>/", views.initiate_payment, name="initiate_payment"),
+    path("book/process_payment/", views.process_payment, name="process_payment"),
     # path("booking-success/<int:booking_id>/", views.booking_success, name="booking_success"),
 
 
 ]
+
 
