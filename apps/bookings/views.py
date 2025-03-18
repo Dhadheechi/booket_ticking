@@ -99,6 +99,7 @@ from .models import Showtime, Seat, Tier, Customer, Booking, UniqueSeatBooking, 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.urls import reverse
 
 
 @login_required
@@ -176,7 +177,9 @@ def book_ticket(request):
             booking_date=date
         )
 
-        return JsonResponse({"status": "success", "booking_id": booking.id})
+        print(f"Redirecting to confirm_booking with unique_seat_id: {unique_booking.unique_seat_id}")
+        return redirect(reverse("confirm_booking", kwargs={"unique_seat_id": unique_booking.unique_seat_id}))
+
 
 
     return render(request, "bookings/book_ticket.html", {
@@ -193,6 +196,37 @@ def book_ticket(request):
     })
 
 
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import UniqueSeatBooking
+
+@login_required
+def confirm_booking(request, unique_seat_id):
+    unique_booking = get_object_or_404(UniqueSeatBooking, unique_seat_id=unique_seat_id)
+    
+    # Fetch related objects
+    seat = get_object_or_404(Seat, id=unique_booking.seat_id)
+    tier = get_object_or_404(Tier, id=unique_booking.tier_id)
+    show = get_object_or_404(Showtime, id=unique_booking.show_id)
+    event = get_object_or_404(Event, id=unique_booking.event_id)
+    screen = show.screen
+    theatre = screen.theatre
+    city = get_object_or_404(City, id=unique_booking.city_id)
+    
+    context = {
+        "unique_booking": unique_booking,
+        "seat": seat,
+        "tier": tier,
+        "show": show,
+        "event": event,
+        "screen": screen,
+        "theatre": theatre,
+        "city": city,
+        "date": unique_booking.date
+    }
+    
+    return render(request, "bookings/confirm_booking.html", context)
 
 
 
@@ -396,21 +430,7 @@ def get_tiers(request):
     except Showtime.DoesNotExist:
         return JsonResponse({"error": "Invalid show ID"}, status=400)
     
-@login_required
-def confirm_booking(request):
-    show_id = request.GET.get("show_id")
-    seat_id = request.GET.get("seat_id")
 
-    if not (show_id and seat_id):
-        return redirect("book_ticket")  # Redirect if missing data
-
-    show = Showtime.objects.get(id=show_id)
-    seat = Seat.objects.get(id=seat_id)
-
-    return render(request, "bookings/confirm_booking.html", {
-        "show": show,
-        "seat": seat
-    })
 
 
 # @login_required
