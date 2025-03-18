@@ -9,6 +9,8 @@ from .views import get_events
 from .views import get_shows
 from .views import get_seats
 from .views import get_tiers
+from django.urls import path
+from .views import confirm_booking, download_booking_pdf
 
 urlpatterns = [
     path('', views.index, name='home'),  # Add this for homepage
@@ -25,7 +27,8 @@ urlpatterns = [
     path("get-shows/", views.get_shows, name="get-shows"),
     path("get-seats/", get_seats, name="get-seats"),
     path("get-tiers/", get_tiers, name="get_tiers"),
-    path('book/confirm/<str:unique_seat_id>/', views.confirm_booking, name='confirm_booking')
+    path('book/confirm/<str:unique_seat_id>/', views.confirm_booking, name='confirm_booking'),
+    path("book/confirm/<path:unique_seat_id>/download/", download_booking_pdf, name="download_booking_pdf"),
     # path("booking-success/<int:booking_id>/", views.booking_success, name="booking_success"),
 
 

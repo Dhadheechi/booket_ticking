@@ -489,3 +489,42 @@ def get_tiers(request):
 # def booking_success(request, booking_id):
 #     booking = Booking.objects.get(id=booking_id)
 #     return render(request, "bookings/booking_success.html", {"booking": booking})
+
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from reportlab.pdfgen import canvas
+from .models import UniqueSeatBooking, Event, Showtime, City, Seat, Tier, Theatre, Screen
+
+def download_booking_pdf(request, unique_seat_id):
+    unique_booking = get_object_or_404(UniqueSeatBooking, unique_seat_id=unique_seat_id)
+
+    # Fetch related objects using stored IDs
+    event = get_object_or_404(Event, id=unique_booking.event_id)
+    show = get_object_or_404(Showtime, id=unique_booking.show_id)
+    city = get_object_or_404(City, id=unique_booking.city_id)
+    seat = get_object_or_404(Seat, id=unique_booking.seat_id)
+    tier = get_object_or_404(Tier, id=unique_booking.tier_id)
+    screen = get_object_or_404(Screen, id=unique_booking.screen_id)
+    theatre = get_object_or_404(Theatre, id=screen.theatre_id)  # Fetch theatre using screen
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="booking_{unique_seat_id}.pdf"'
+
+    p = canvas.Canvas(response)
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, 800, "Booking Confirmation")
+
+    p.setFont("Helvetica", 12)
+    p.drawString(100, 770, f"Booking ID: {unique_booking.unique_seat_id}")
+    p.drawString(100, 750, f"Event Name: {event.event_name}")
+    p.drawString(100, 730, f"Date: {unique_booking.date}")
+    p.drawString(100, 710, f"Show Time: {show.slot_time}")
+    p.drawString(100, 690, f"City: {city.city_name}")
+    p.drawString(100, 670, f"Theatre: {theatre.theatre_name}")
+    p.drawString(100, 650, f"Seat Number: {seat.seat_number}")
+    p.drawString(100, 630, f"Tier: {tier.tier_name}")
+    p.drawString(100, 610, f"Price: ${tier.price}")
+
+    p.showPage()
+    p.save()
+    return response

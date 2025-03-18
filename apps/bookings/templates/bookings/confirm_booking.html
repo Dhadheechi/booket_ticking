@@ -7,16 +7,16 @@
     <div class="confirmation-details">
         <div class="detail-section">
             <h3>Event Details</h3>
-            <p><strong>Event Name:</strong> {{ event.name }}</p>
+            <p><strong>Event Name:</strong> {{ event.event_name }}</p>
             <p><strong>Date:</strong> {{ date }}</p>
             <p><strong>Show Time:</strong> {{ show.slot_time }}</p>
         </div>
         
         <div class="detail-section">
             <h3>Venue Details</h3>
-            <p><strong>City:</strong> {{ city.name }}</p>
-            <p><strong>Theatre:</strong> {{ theatre.name }}</p>
-            <p><strong>Screen:</strong> {{ screen.screen_number }}</p>
+            <p><strong>City:</strong> {{ city.city_name }}</p>
+            <p><strong>Theatre:</strong> {{ theatre.theatre_name }}</p>
+            <!-- <p><strong>Screen:</strong> {{ screen.screen_number }}</p> -->
         </div>
         
         <div class="detail-section">
@@ -35,6 +35,8 @@
     <div class="confirmation-actions">
         <a href="{% url 'book_ticket' %}" class="btn">Book Another Ticket</a>
         <a href="{% url 'home' %}" class="btn">Return to Home</a>
+        <a href="{% url 'download_booking_pdf' unique_booking.unique_seat_id %}" class="btn">Download as PDF</a>
+
     </div>
 </div>
 {% endblock %}
