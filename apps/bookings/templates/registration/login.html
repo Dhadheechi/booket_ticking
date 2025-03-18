@@ -4,54 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | BookMyShow Clone</title>
-    <!-- ✅ Bootstrap CSS for styling -->
+
+    <!-- ✅ Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+        /* 🎨 Lightened Animated Gradient Background */
         body {
-            background-color: #f8f9fa;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(-45deg, #3a3a55, #47476b, #5a5a8a, #3a3a55);
+            background-size: 300% 300%;
+            animation: gradientTransition 12s ease infinite;
         }
+
+        /* 🌈 Smooth Gradient Animation */
+        @keyframes gradientTransition {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 📦 Bigger Login Box */
         .login-container {
-            max-width: 400px;
-            padding: 20px;
+            width: 450px;  /* Increased width */
+            padding: 40px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
         }
-        .btn-primary {
-            background-color: #e50914;
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: #ff5500;
+            color: white;
             border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s ease-in-out;
         }
-        .btn-primary:hover {
-            background-color: #b20710;
+
+        .btn-login:hover {
+            background-color: #e64a00;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-link a {
+            color: #ff5500;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-container">
-            <h2 class="text-center mb-4">Login</h2>
-            
-            {% if form.errors %}
-                <div class="alert alert-danger">Your username and password didn't match. Please try again.</div>
-            {% endif %}
-            
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-        </div>
+
+    <div class="login-container">
+        <h2 class="mb-4">Login</h2>
+
+        <!-- ✅ Display Django Messages -->
+        {% if messages %}
+            <div class="alert alert-dismissible fade show">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-login">Login</button>
+        </form>
+
+        <p class="register-link">
+            Don't have an account? <a href="{% url 'register' %}">Register</a>
+        </p>
     </div>
 
     <!-- ✅ Bootstrap JS -->

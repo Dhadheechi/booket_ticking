@@ -4,26 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | BookMyShow Clone</title>
-    <!-- ✅ Bootstrap CSS for styling -->
+
+    <!-- ✅ Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+        /* 🎨 Full-page animated gradient background */
         body {
-            background-color: #f8f9fa;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(-45deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3);
+            background-size: 400% 400%;
+            animation: backgroundTransition 8s ease infinite;
         }
-        .register-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
+
+        /* 🌈 Smooth gradient transition */
+        @keyframes backgroundTransition {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container-box {
+            display: flex;
+            width: 900px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section {
+            width: 50%;
+            background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .left-section h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .left-section p {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .right-section {
+            width: 50%;
+            padding: 40px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        .btn-register {
+            width: 100%;
+            background-color: #ff5500;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-register:hover {
+            background-color: #e64a00;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .login-link a {
+            color: #ff5500;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="register-container">
+    <div class="container-box">
+        <!-- Left Section (Branding) -->
+        <div class="left-section">
+            <h2>Welcome to Booket</h2>
+            <p>Book your favorite events and movies hassle-free!</p>
+        </div>
+
+        <!-- Right Section (Registration Form) -->
+        <div class="right-section">
             <h2 class="text-center mb-4">Register</h2>
 
             <!-- ✅ Display Django Messages -->
@@ -39,35 +127,30 @@
                 {% csrf_token %}
 
                 <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Phone Number</label>
-                    <input type="text" name="phone_no" class="form-control" required>
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password1" class="form-control" required>
+                    <input type="text" name="phone_no" class="form-control" placeholder="Phone Number" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" name="password2" class="form-control" required>
+                    <input type="password" name="password1" class="form-control" placeholder="Password" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+                <div class="mb-3">
+                    <input type="password" name="password2" class="form-control" placeholder="Confirm Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-register">Register</button>
             </form>
 
-            <p class="text-center mt-3">
-                Already have an account? <a href="{% url 'login' %}">Login</a>
+            <p class="login-link">
+                Already have an account? <a href="{% url 'login' %}">Log In</a>
             </p>
         </div>
     </div>
