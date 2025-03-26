@@ -28,5 +28,15 @@ DB_HOST=localhost
 
 DB_PORT=3306
 
+## Libraries used that we didn't already have
 
-hi guys
+pip install django  
+
+pip install pymysql  
+
+pip install cryptography  
+
+pip install dotenv  
+
+pip install reportlab  
+
