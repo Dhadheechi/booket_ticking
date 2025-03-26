@@ -33,7 +33,7 @@
     </div>
     
     <div class="confirmation-actions">
-        <a href="{% url 'initiate_payment' booking_id=unique_booking.id %}" class="btn">Proceed to pay</a>
+        <a href="{% url 'initiate_payment' unique_seat_id=unique_booking.unique_seat_id %}" class="btn">Proceed to pay</a>
         <a href="{% url 'home' %}" class="btn">Return to Home</a>
         <!-- <a href="{% url 'download_booking_pdf' unique_booking.unique_seat_id %}" class="btn">Download as PDF</a> -->
 

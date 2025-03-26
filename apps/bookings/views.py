@@ -25,72 +25,7 @@ from .models import Showtime, Seat, Booking, Customer, Theatre
 
 from django.views.decorators.csrf import csrf_exempt
 
-# @login_required  # Ensure only logged-in users can book tickets
-# def book_ticket(request):
-#     selected_city_id = request.session.get("selected_city_id")
-#     if not selected_city_id:
-#         return redirect("select_city")
 
-#     theatres = Theatre.objects.filter(city_id=selected_city_id)
-
-#     # Get selected theatre, event, and show
-#     selected_theatre_id = request.GET.get("theatre")
-#     events = Event.objects.filter(showtime__screen__theatre_id=selected_theatre_id).distinct() if selected_theatre_id else []
-#     selected_event_id = request.GET.get("event")
-#     shows = Showtime.objects.filter(screen__theatre_id=selected_theatre_id, event_id=selected_event_id) if selected_theatre_id and selected_event_id else []
-
-#     # ✅ Fetch Tiers for the Selected Theatre
-#     tiers = Tier.objects.all()  # Fetch all tiers initially
-
-#     # ✅ Fetch Seats for the Selected Tier (Initially Empty, Fetched via AJAX)
-#     selected_tier_id = request.GET.get("tier")
-#     seats = Seat.objects.all()  # Fetch all seats initially
-
-#     # ✅ Handle Booking Form Submission
-#     if request.method == "POST":
-#         show_id = request.POST.get("show")
-#         seat_id = request.POST.get("seat")
-
-#         if not (show_id and seat_id):
-#             return JsonResponse({"status": "error", "message": "Missing show or seat."}, status=400)
-
-#         # Ensure seat is available before booking
-#         seat = Seat.objects.filter(id=seat_id, status="available").first()
-#         if not seat:
-#             return JsonResponse({"status": "error", "message": "Seat is not available."}, status=400)
-
-#                 # ✅ Get the logged-in user's customer profile
-#         try:
-#             customer = Customer.objects.get(user=request.user)  # Assuming `Customer` has a `user` FK
-#         except Customer.DoesNotExist:
-#             return JsonResponse({"status": "error", "message": "Customer profile not found."}, status=400)
-
-
-#         # ✅ Create a booking
-#         booking = Booking.objects.create(
-#             customer=customer,
-#             show_id=show_id,
-#             seat_id=seat_id,
-#             status="confirmed"
-#         )
-
-#         # Mark seat as booked
-#         seat.status = "booked"
-#         seat.save()
-
-#         return JsonResponse({"status": "success", "booking_id": booking.id})
-
-#     return render(request, "bookings/book_ticket.html", {
-#         "theatres": theatres,
-#         "events": events,
-#         "shows": shows,
-#         "tiers": tiers,
-#         "seats": seats,
-#         "selected_city_id": selected_city_id,
-#         "selected_theatre_id": selected_theatre_id,
-#         "selected_event_id": selected_event_id,
-#         "selected_tier_id": selected_tier_id
-#     })
 from apps.bookings.models import Date  # ✅ Import Date model
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -435,62 +370,7 @@ def get_tiers(request):
 
 
 
-# @login_required
-# def finalize_booking(request):
-#     if request.method == "POST":
-#         show_id = request.POST.get("show_id")
-#         seat_id = request.POST.get("seat_id")
-#         tier_id = request.POST.get("tier_id")
-#         screen_id = request.POST.get("screen_id")
-#         theatre_id = request.POST.get("theatre_id")
-#         city_id = request.POST.get("city_id")
 
-#         if not (show_id and seat_id and tier_id and screen_id and theatre_id and city_id):
-#             return JsonResponse({"status": "error", "message": "Missing required fields."}, status=400)
-
-#         # ✅ Generate unique seat identifier
-#         unique_seat_id = f"{city_id}-{theatre_id}-{show_id}-{tier_id}-{seat_id}"
-
-#         # ✅ Check if seat is already booked
-#         if UniqueSeatBooking.objects.filter(unique_seat_id=unique_seat_id, status="booked").exists():
-#             return JsonResponse({"status": "error", "message": "Seat is already booked."}, status=400)
-
-#         # ✅ Get customer profile
-#         try:
-#             customer = Customer.objects.get(user=request.user)
-#         except Customer.DoesNotExist:
-#             return JsonResponse({"status": "error", "message": "Customer profile not found."}, status=400)
-
-#         # ✅ Create a unique seat booking entry
-#         unique_booking = UniqueSeatBooking.objects.create(
-#             unique_seat_id=unique_seat_id,
-#             seat_id=seat_id,
-#             tier_id=tier_id,
-#             showtime_id=show_id,
-#             screen_id=screen_id,
-#             theatre_id=theatre_id,
-#             city_id=city_id,
-#             status="booked"
-#         )
-
-#         # ✅ Create a booking entry
-#         booking = Booking.objects.create(
-#             customer=customer,
-#             show_id=show_id,
-#             seat_id=seat_id,
-#             status="confirmed"
-#         )
-
-#         return redirect("booking_success", booking_id=booking.id)
-
-#     return redirect("book_ticket")
-
-
-
-# @login_required
-# def booking_success(request, booking_id):
-#     booking = Booking.objects.get(id=booking_id)
-#     return render(request, "bookings/booking_success.html", {"booking": booking})
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -552,58 +432,139 @@ from .models import Booking, Transaction
 from django.urls import reverse
 
 @login_required
-def initiate_payment(request, booking_id):
-    try:
-        # Directly fetch booking using booking_id (no need to split)
-        booking = get_object_or_404(Booking, id=booking_id, customer__user=request.user)
+def initiate_payment(request, unique_seat_id):
+    # Find the unique seat booking first
+    usb = get_object_or_404(UniqueSeatBooking, unique_seat_id=unique_seat_id)
+    
+    # Now find the booking using seat_id and show_id
+    booking = get_object_or_404(Booking, seat_id=usb.seat_id, show_id=usb.show_id, customer__user=request.user)
 
-        # Create a transaction record with initial pending status
-        transaction = Transaction.objects.create(
-            booking=booking,
-            amount_paid=booking.seat.tier.price,  # Assuming this exists
-            payment_method="Online",  # Adjust if necessary
-            payment_status=Transaction.PENDING
-        )
+    # Create a transaction record with pending status
+    transaction = Transaction.objects.create(
+        booking=booking,
+        amount_paid=booking.seat.tier.price,
+        payment_method="Online",
+        payment_status=Transaction.PENDING
+    )
 
-        return render(request, "bookings/payment_page.html", {
-            "transaction": transaction,
-            "booking": booking
-        })
-
-    except Booking.DoesNotExist:
-        messages.error(request, "Booking not found.")
-        return redirect('home')
-
+    return render(request, "bookings/payment_page.html", {
+        "transaction": transaction,
+        "booking": booking,
+        "unique_seat_id": unique_seat_id,
+    })
 
 
 
-from django.urls import reverse
+
+from django.utils import timezone
 
 @login_required
-def process_payment(request):
+def process_payment(request, unique_seat_id):
     if request.method == "POST":
-        transaction_id = request.POST.get("transaction_id")
         otp_entered = request.POST.get("otp")
+        print(f"DEBUG: OTP entered: {otp_entered}")
 
-        transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
-
-        # ✅ Mock OTP Validation (Assume "123456" is the correct OTP)
-        if otp_entered != "000000":
-            transaction.payment_status = Transaction.SUCCESS
-            transaction.save()
-
-            messages.success(request, "Payment successful! Your booking is confirmed.")
-            success_url = reverse("booking_success", kwargs={"booking_id": transaction.booking.id})
-            return redirect(success_url)
-        else:
-            transaction.payment_status = Transaction.FAILED
-            transaction.save()
-
-            # 🚨 Rollback: Delete booking and free seat
-            transaction.booking.delete()
-            UniqueSeatBooking.objects.filter(unique_seat_id=transaction.booking.unique_seat_id).delete()
-
-            messages.error(request, "Payment failed. Please try again.")
+        if not otp_entered:
+            print("DEBUG: No OTP entered. Rolling back.")
+            messages.error(request, "Payment failed. No OTP entered.")
             return redirect("booking_failed")
 
-    return redirect("home")
+        try:
+            # ✅ Fetch the existing booking using `unique_seat_id`
+            unique_booking = UniqueSeatBooking.objects.get(unique_seat_id=unique_seat_id)
+            booking = Booking.objects.get(
+                seat_id=unique_booking.seat_id,  
+                show_id=unique_booking.show_id
+            )
+            print(f"DEBUG: Found existing Booking: {booking}")
+
+            # ✅ Create a new successful transaction
+            transaction = Transaction.objects.create(
+                booking=booking,
+                amount_paid=100.00,  # Replace with actual amount
+                payment_method="Dummy",
+                payment_status=Transaction.SUCCESS
+            )
+            print(f"DEBUG: Transaction created: {transaction}")
+
+            messages.success(request, "Payment successful! Your booking is confirmed.")
+            return redirect(reverse("booking_success", kwargs={"booking_id": booking.id}))
+
+        except UniqueSeatBooking.DoesNotExist:
+            print("DEBUG: Unique Seat Booking not found. Rolling back.")
+            messages.error(request, "Payment failed. Booking not found.")
+            return redirect("booking_failed")
+
+        except Booking.DoesNotExist:
+            print("DEBUG: Booking not found. Rolling back.")
+            messages.error(request, "Payment failed. No booking found.")
+            return redirect("booking_failed")
+
+        except Exception as e:
+            print(f"DEBUG: Exception in payment processing - {str(e)}")
+            messages.error(request, f"An unexpected error occurred: {str(e)}")
+            return redirect("booking_failed")
+
+    return redirect("booking_failed")
+
+
+
+
+@login_required
+def booking_success(request, booking_id):
+    # Retrieve the booking, ensuring it belongs to the current user
+    booking = get_object_or_404(
+        Booking, 
+        id=booking_id, 
+        customer__user=request.user, 
+        status="confirmed"
+    )
+    
+    try:
+        # Find the corresponding UniqueSeatBooking
+        unique_seat_booking = UniqueSeatBooking.objects.get(
+            seat_id=booking.seat_id, 
+            show_id=booking.show_id,
+            date=booking.booking_date
+        )
+    except UniqueSeatBooking.DoesNotExist:
+        messages.error(request, "Booking details not found.")
+        return redirect("book_ticket")
+    
+    # Fetch related objects for complete booking information
+    try:
+        event = Event.objects.get(id=unique_seat_booking.event_id)
+        show = Showtime.objects.get(id=unique_seat_booking.show_id)
+        seat = Seat.objects.get(id=unique_seat_booking.seat_id)
+        tier = Tier.objects.get(id=unique_seat_booking.tier_id)
+        city = City.objects.get(id=unique_seat_booking.city_id)
+        screen = Screen.objects.get(id=unique_seat_booking.screen_id)
+        theatre = screen.theatre
+    except (Event.DoesNotExist, Showtime.DoesNotExist, Seat.DoesNotExist, 
+            Tier.DoesNotExist, City.DoesNotExist, Screen.DoesNotExist) as e:
+        messages.error(request, f"Error retrieving booking details: {str(e)}")
+        return redirect("book_ticket")
+    
+    # Prepare context with all booking details
+    context = {
+        "booking": booking,
+        "unique_seat_booking": unique_seat_booking,
+        "event": event,
+        "show": show,
+        "seat": seat,
+        "tier": tier,
+        "city": city,
+        "screen": screen,
+        "theatre": theatre,
+        "unique_seat_id": unique_seat_booking.unique_seat_id
+    }
+    
+    return render(request, "bookings/booking_success.html", context)
+
+def booking_failed(request):
+    """
+    View to handle failed bookings
+    """
+    return render(request, "bookings/booking_failed.html", {
+        "message": "Your booking could not be completed. Please try again."
+    })

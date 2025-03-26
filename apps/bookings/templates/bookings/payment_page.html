@@ -50,7 +50,7 @@
 <body>
     <h2>Payment for Booking #{{ booking.id }}</h2>
     <p>Amount: ₹{{ transaction.amount }}</p>
-    <form method="POST" action="{% url 'process_payment' %}">
+    <form method="POST" action="{% url 'process_payment' unique_seat_id=unique_seat_id %}">
         {% csrf_token %}
         <input type="hidden" name="transaction_id" value="{{ transaction.transaction_id }}">
         <label for="otp">Enter OTP:</label>
