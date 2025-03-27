@@ -34,16 +34,26 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        button {
+        button, .cancel-btn a {
+            display: inline-block;
             background-color: #007bff;
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px;
+            text-align: center;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        .cancel-btn a {
+            background-color: #dc3545;
+        }
+        .cancel-btn a:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -56,7 +66,9 @@
         <label for="otp">Enter OTP:</label>
         <input type="text" id="otp" name="otp" required>
         <button type="submit">Confirm Payment</button>
+        <span class="cancel-btn">
+            <a href="{% url 'booking_failed' %}">Cancel Payment</a>
+        </span>
     </form>
 </body>
 </html>
-

@@ -431,35 +431,63 @@ from .models import Booking, Transaction
 
 from django.urls import reverse
 
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.urls import reverse
+from .models import UniqueSeatBooking, Booking, Transaction
+
 @login_required
 def initiate_payment(request, unique_seat_id):
-    # Find the unique seat booking first
-    usb = get_object_or_404(UniqueSeatBooking, unique_seat_id=unique_seat_id)
-    
-    # Now find the booking using seat_id and show_id
-    booking = get_object_or_404(Booking, seat_id=usb.seat_id, show_id=usb.show_id, customer__user=request.user)
+    print("DEBUG: Initiating payment...")
 
-    # Create a transaction record with pending status
-    transaction = Transaction.objects.create(
-        booking=booking,
-        amount_paid=booking.seat.tier.price,
-        payment_method="Online",
-        payment_status=Transaction.PENDING
-    )
+    try:
+        # ✅ Get UniqueSeatBooking using unique_seat_id
+        unique_booking = get_object_or_404(UniqueSeatBooking, unique_seat_id=unique_seat_id)
 
-    return render(request, "bookings/payment_page.html", {
-        "transaction": transaction,
-        "booking": booking,
-        "unique_seat_id": unique_seat_id,
-    })
+        # ✅ Find the booking using matching seat_id and show_id
+        booking = get_object_or_404(
+            Booking, 
+            seat_id=unique_booking.seat_id, 
+            show_id=unique_booking.show_id, 
+            customer__user=request.user
+        )
+        print(f"DEBUG: Booking found: {booking}")
 
+        # ✅ Create transaction
+        transaction = Transaction.objects.create(
+            booking=booking,
+            amount_paid=booking.seat.tier.price,
+            payment_method="Online",
+            payment_status=Transaction.PENDING
+        )
+        print(f"DEBUG: Transaction created: {transaction}")
 
+        return render(request, "bookings/payment_page.html", {
+            "transaction": transaction,
+            "booking": booking,
+            "unique_seat_id": unique_seat_id,
+        })
 
+    except UniqueSeatBooking.DoesNotExist:
+        print("DEBUG: UniqueSeatBooking not found.")
+        messages.error(request, "Booking not found.")
+        return redirect("booking_failed")
+
+    except Booking.DoesNotExist:
+        print("DEBUG: Booking not found.")
+        messages.error(request, "Payment failed. No booking found.")
+        return redirect("booking_failed")
+
+    except Exception as e:
+        print(f"DEBUG: Error in initiate_payment - {str(e)}")
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect("booking_failed")
 
 from django.utils import timezone
 
 @login_required
 def process_payment(request, unique_seat_id):
+    print("DEBUG: Processing payment...")
     if request.method == "POST":
         otp_entered = request.POST.get("otp")
         print(f"DEBUG: OTP entered: {otp_entered}")
@@ -488,6 +516,11 @@ def process_payment(request, unique_seat_id):
             print(f"DEBUG: Transaction created: {transaction}")
 
             messages.success(request, "Payment successful! Your booking is confirmed.")
+            print("DEBUG: Redirecting to booking_success with booking_id:", booking.id)
+            # Update booking status to confirmed
+            booking.status = Booking.CONFIRMED 
+            booking.save()
+            print(f"DEBUG: Booking status updated to confirmed for {booking}")
             return redirect(reverse("booking_success", kwargs={"booking_id": booking.id}))
 
         except UniqueSeatBooking.DoesNotExist:
@@ -509,29 +542,36 @@ def process_payment(request, unique_seat_id):
 
 
 
-
 @login_required
 def booking_success(request, booking_id):
     # Retrieve the booking, ensuring it belongs to the current user
-    booking = get_object_or_404(
-        Booking, 
-        id=booking_id, 
-        customer__user=request.user, 
-        status="confirmed"
-    )
+    try:
+        booking = get_object_or_404(
+            Booking, 
+            id=booking_id, 
+            customer__user=request.user,
+            status=Booking.CONFIRMED
+        )
+        print(f"DEBUG: Booking confirmed with ID {booking.id}")
+    except Exception as e:
+        print(f"DEBUG: Error fetching booking - {e}")
+        messages.error(request, "Booking not found or unauthorized access.")
+        return redirect("book_ticket")
     
     try:
-        # Find the corresponding UniqueSeatBooking
+        # Convert booking_date to string for matching
+        booking_date_str = booking.booking_date.strftime("%Y-%m-%d")
         unique_seat_booking = UniqueSeatBooking.objects.get(
             seat_id=booking.seat_id, 
             show_id=booking.show_id,
-            date=booking.booking_date
+            date=booking_date_str
         )
     except UniqueSeatBooking.DoesNotExist:
+        print(f"DEBUG: No matching UniqueSeatBooking found for Seat ID {booking.seat_id}, Show ID {booking.show_id}, Date {booking_date_str}")
         messages.error(request, "Booking details not found.")
         return redirect("book_ticket")
     
-    # Fetch related objects for complete booking information
+    # Fetch related objects
     try:
         event = Event.objects.get(id=unique_seat_booking.event_id)
         show = Showtime.objects.get(id=unique_seat_booking.show_id)
@@ -540,12 +580,11 @@ def booking_success(request, booking_id):
         city = City.objects.get(id=unique_seat_booking.city_id)
         screen = Screen.objects.get(id=unique_seat_booking.screen_id)
         theatre = screen.theatre
-    except (Event.DoesNotExist, Showtime.DoesNotExist, Seat.DoesNotExist, 
-            Tier.DoesNotExist, City.DoesNotExist, Screen.DoesNotExist) as e:
+    except Exception as e:
+        print(f"DEBUG: Error fetching related objects - {e}")
         messages.error(request, f"Error retrieving booking details: {str(e)}")
         return redirect("book_ticket")
     
-    # Prepare context with all booking details
     context = {
         "booking": booking,
         "unique_seat_booking": unique_seat_booking,
@@ -558,7 +597,7 @@ def booking_success(request, booking_id):
         "theatre": theatre,
         "unique_seat_id": unique_seat_booking.unique_seat_id
     }
-    
+    print("DEBUG: Booking success context:", context)
     return render(request, "bookings/booking_success.html", context)
 
 def booking_failed(request):

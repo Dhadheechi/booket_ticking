@@ -1,10 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Booking Successful 🎉</h2>
-<p>Your booking for <strong>{{ booking.show.event.event_name }}</strong> at <strong>{{ booking.show.slot_time }}</strong> has been confirmed.</p>
-<p><strong>Seat Number:</strong> {{ booking.seat.seat_number }}</p>
+<style>
+    .success-container {
+        background-color: #e6f9e6;
+        color: #2d8659;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        max-width: 500px;
+        margin: 50px auto;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+        font-size: 2rem;
+    }
+    p {
+        font-size: 1.2rem;
+    }
+    .book-another {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        font-size: 1rem;
+    }
+    .book-another:hover {
+        background-color: #0056b3;
+    }
+</style>
 
-<a href="{% url 'book_ticket' %}">Book Another Ticket</a>
+<div class="success-container">
+    <h2>🎉 Booking Successful!</h2>
+    <p>Your booking for <strong>{{ booking.show.event.event_name }}</strong> at <strong>{{ booking.show.slot_time }}</strong> has been confirmed.</p>
+    <p><strong>Seat Number:</strong> {{ booking.seat.seat_number }}</p>
+    <p><strong>City:</strong> {{ city.city_name }}</p>
+    <!-- <p><strong>Amount Paid:</strong> ${{ booking.amount }}</p> -->
+    <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+    
+
+    <a href="{% url 'book_ticket' %}" class="book-another">Book Another Ticket</a>
+</div>
 {% endblock %}
-
