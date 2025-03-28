@@ -4,55 +4,88 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(-45deg, #90EE90, #A7F1A8, #BFF4BE, #D6F6D5);
+    background-size: 300% 300%;
+    animation: bgAnimation 15s ease infinite;
+    backdrop-filter: none; /* Removed blur effect */
 }
 
-/* Modal Box */
+@keyframes bgAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Modal Box - 1.5x larger */
 .modal-content {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 400px;
+    padding: 45px; /* Increased from 30px */
+    border-radius: 18px; /* Increased from 12px */
+    width: 900px; /* Increased from 600px - this is 1.5x larger */
     max-width: 90%;
+    box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.25);
+    text-align: center;
 }
 
 /* Search Bar */
 #citySearch {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 12px;
+    font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 /* City List */
 .city-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
 }
 
 .city {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 18px 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
     cursor: pointer;
     text-align: center;
-    min-width: 100px;
+    background: white;
+    transition: all 0.2s;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
 }
 
-/* View All Button */
-.view-all {
-    margin-top: 10px;
-    background: none;
-    border: none;
-    color: red;
-    cursor: pointer;
+.city:hover {
+    border-color: #0d6efd;
+    background-color: #e7f1ff;
+    transform: translateY(-3px);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar Styling */
+.city-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.city-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.city-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.city-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

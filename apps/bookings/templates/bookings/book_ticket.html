@@ -7,50 +7,141 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     
-    <!-- ✅ Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         body {
-            background: linear-gradient(45deg, #e0f7fa, #b3e5fc, #81d4fa, #4fc3f7);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: #f8f9fa;
         }
-
-        .container {
-            background: linear-gradient(135deg, white, #f0f0f0);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
         .booking-container {
-            max-width: 500px;
+            max-width: 800px;
             margin: 50px auto;
             padding: 20px;
             background: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 10;
         }
+        .step-container {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .step-container.collapsed {
+            display: none;
+        }
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .selection-item {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .selection-item:hover {
+            border-color: #0d6efd;
+            background-color: #f1f8ff;
+        }
+        .selection-item.selected {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+            font-weight: bold;
+        }
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            font-size: 14px;
+            cursor: pointer;
+            color: #0d6efd;
+        }
+        .continue-btn {
+            margin-top: 20px;
+        }
+        .date-picker {
+            margin-bottom: 20px;
+        }
+        .seat-item.booked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .seat-item.available:hover {
+            border-color: #0d6efd;
+            background-color: #f1f8ff;
+        }
+
+        .seat-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            background-color: #fff;
+        }
+
+        .seat-item:hover {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+        }
+
+        .seat-item.selected {
+            border-color: #0d6efd;
+            background-color: #e0f7fa;
+            font-weight: bold;
+        }
+
+        .seat-item.booked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .seat-item.available:hover {
+            background-color: #cce5ff;
+            border-color: #0056b3;
+        }
+
+        .seat-item.available {
+            background-color: #e9ecef;
+            border-color: #b8daff;
+        }
+
+        .seat-item.selected {
+            background-color: #c3e6cb;
+            border-color: #28a745;
+        }
+
+        .seat-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+
     </style>
 </head>
 <body>
@@ -61,88 +152,136 @@
 
             <form id="booking-form" action="" method="POST">
                 {% csrf_token %}
-
                 <input type="hidden" name="selected_city" value="{{ selected_city_id }}">
+                <input type="hidden" id="theatre-input" name="theatre" value="">
+                <input type="hidden" id="event-input" name="event" value="">
+                <input type="hidden" id="date-input" name="date" value="">
+                <input type="hidden" id="show-input" name="show" value="">
+                <input type="hidden" id="tier-input" name="tier" value="">
+                <input type="hidden" id="seat-input" name="seat" value="">
 
-                <div class="mb-3">
-                    <label class="form-label">Select Theatre:</label>
-                    <select name="theatre" id="theatre-select" class="form-select" required>
-                        <option value="">-- Select a theatre --</option>
+                <!-- Step 1: Select Theatre -->
+                <div id="theatre-step" class="step-container">
+                    <div class="step-header">
+                        <h5>Select Theatre:</h5>
+                    </div>
+                    <div id="theatre-container" class="selection-grid">
                         {% for theatre in theatres %}
-                            <option value="{{ theatre.id }}">{{ theatre.theatre_name }}</option>
+                            <div class="selection-item theatre-item" data-id="{{ theatre.id }}">
+                                {{ theatre.theatre_name }}
+                            </div>
                         {% endfor %}
-                    </select>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Select Event:</label>
-                    <select name="event" id="event-select" class="form-select" required disabled>
-                        <option value="">-- Select an event --</option>
-                        {% for event in events %}
-                            <option value="{{ event.id }}">{{ event.event_name }}</option>
-                        {% endfor %}
-                    </select>
+                <!-- Step 2: Select Event -->
+                <div id="event-step" class="step-container collapsed">
+                    <div class="step-header">
+                        <h5>Select Event:</h5>
+                        <span class="back-btn" data-target="theatre-step">Back to Theatres</span>
+                    </div>
+                    <div id="event-container" class="selection-grid">
+                        <!-- Events will be loaded dynamically -->
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Select Date:</label>
-                    <input type="date" id="date-input" name="date" class="form-control" required>
+                <!-- Step 3: Select Date -->
+                <div id="date-step" class="step-container collapsed">
+                    <div class="step-header">
+                        <h5>Select Date:</h5>
+                        <span class="back-btn" data-target="event-step">Back to Events</span>
+                    </div>
+                    <div class="date-picker">
+                        <input type="date" id="date-picker-input" class="form-control" required>
+                    </div>
+                    <button type="button" id="date-continue" class="btn btn-primary w-100 continue-btn">Continue</button>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Select Show:</label>
-                    <select name="show" id="show-select" class="form-select" required disabled>
-                        <option value="">-- Select a show --</option>
-                        {% for show in shows %}
-                            <option value="{{ show.id }}" data-theatre="{{ show.screen.theatre.id }}" data-event="{{ show.event.id }}">
-                                {{ show.event.event_name }} - {{ show.slot_time }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                <!-- Step 4: Select Show -->
+                <div id="show-step" class="step-container collapsed">
+                    <div class="step-header">
+                        <h5>Select Show:</h5>
+                        <span class="back-btn" data-target="date-step">Back to Date</span>
+                    </div>
+                    <div id="show-container" class="selection-grid">
+                        <!-- Shows will be loaded dynamically -->
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Select Tier:</label>
-                    <select name="tier" id="tier-select" class="form-select" required disabled>
-                        <option value="">-- Select a tier --</option>
-                        {% for tier in tiers %}
-                            <option value="{{ tier.id }}">{{ tier.tier_name }} - ₹{{ tier.price }}</option>
-                        {% endfor %}
-                    </select>
+                <!-- Step 5: Select Tier -->
+                <div id="tier-step" class="step-container collapsed">
+                    <div class="step-header">
+                        <h5>Select Tier:</h5>
+                        <span class="back-btn" data-target="show-step">Back to Shows</span>
+                    </div>
+                    <div id="tier-container" class="selection-grid">
+                        <!-- Tiers will be loaded dynamically -->
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Select Seat:</label>
-                    <select name="seat" id="seat-select" class="form-select" required disabled>
-                        <option value="">-- Select a seat --</option>
-                    </select>
+                <!-- Step 6: Select Seat -->
+                <div id="seat-step" class="step-container collapsed">
+                    <div class="step-header">
+                        <h5>Select Seat:</h5>
+                        <span class="back-btn" data-target="tier-step">Back to Tiers</span>
+                    </div>
+                    <div id="seat-container" class="selection-grid">
+                        <!-- Seats will be loaded dynamically -->
+                    </div>
+                    <button type="submit" id="book-now" class="btn btn-primary w-100 mt-4">Book Now</button>
                 </div>
-
-                <button type="submit" id="book-now" class="btn btn-primary w-100">Book Now</button>
             </form>
         </div>
     </div>
 
-    <!-- ✅ Bootstrap JS -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const theatreSelect = document.getElementById("theatre-select");
-            const eventSelect = document.getElementById("event-select");
-            const showSelect = document.getElementById("show-select");
-            const seatSelect = document.getElementById("seat-select");
-            const tierSelect = document.getElementById("tier-select");
+            // Hidden inputs
+            const theatreInput = document.getElementById("theatre-input");
+            const eventInput = document.getElementById("event-input");
+            const dateInput = document.getElementById("date-input");
+            const showInput = document.getElementById("show-input");
+            const tierInput = document.getElementById("tier-input");
+            const seatInput = document.getElementById("seat-input");
+            const datePicker = document.getElementById("date-picker-input");
+            
+            // Step containers
+            const theatreStep = document.getElementById("theatre-step");
+            const eventStep = document.getElementById("event-step");
+            const dateStep = document.getElementById("date-step");
+            const showStep = document.getElementById("show-step");
+            const tierStep = document.getElementById("tier-step");
+            const seatStep = document.getElementById("seat-step");
 
-            theatreSelect.addEventListener("change", function() {
-                if (this.value) {
-                    eventSelect.disabled = false;
-                    fetchEvents(this.value);
-                } else {
-                    eventSelect.disabled = true;
-                    showSelect.disabled = true;
-                    tierSelect.disabled = true;
-                    seatSelect.disabled = true;
+            // Selection containers
+            const theatreContainer = document.getElementById("theatre-container");
+            const eventContainer = document.getElementById("event-container");
+            const showContainer = document.getElementById("show-container");
+            const tierContainer = document.getElementById("tier-container");
+            const seatContainer = document.getElementById("seat-container");
+
+            // Theatre selection
+            theatreContainer.addEventListener("click", function(e) {
+                if (e.target.classList.contains("theatre-item")) {
+                    // Clear previous selection
+                    document.querySelectorAll(".theatre-item.selected").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+                    
+                    // Select this item
+                    e.target.classList.add("selected");
+                    const theatreId = e.target.dataset.id;
+                    theatreInput.value = theatreId;
+                    
+                    // Move to next step
+                    theatreStep.classList.add("collapsed");
+                    eventStep.classList.remove("collapsed");
+                    
+                    // Fetch events
+                    fetchEvents(theatreId);
                 }
             });
 
@@ -150,42 +289,89 @@
                 fetch(`/book/get-events/?theatre_id=${theatreId}`)
                     .then(response => response.json())
                     .then(data => {
-                        eventSelect.innerHTML = '<option value="">-- Select an event --</option>';
+                        eventContainer.innerHTML = '';
                         data.events.forEach(event => {
-                            eventSelect.innerHTML += `<option value="${event.id}">${event.name}</option>`;
+                            eventContainer.innerHTML += `
+                                <div class="selection-item event-item" data-id="${event.id}">
+                                    ${event.name}
+                                </div>
+                            `;
                         });
                     });
             }
 
-            eventSelect.addEventListener("change", function() {
-                if (this.value) {
-                    showSelect.disabled = false;
-                    fetchShows(theatreSelect.value, this.value);
-                } else {
-                    showSelect.disabled = true;
-                    tierSelect.disabled = true;
-                    seatSelect.disabled = true;
+            // Event selection
+            eventContainer.addEventListener("click", function(e) {
+                if (e.target.classList.contains("event-item")) {
+                    // Clear previous selection
+                    document.querySelectorAll(".event-item.selected").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+                    
+                    // Select this item
+                    e.target.classList.add("selected");
+                    const eventId = e.target.dataset.id;
+                    eventInput.value = eventId;
+                    
+                    // Move to next step
+                    eventStep.classList.add("collapsed");
+                    dateStep.classList.remove("collapsed");
                 }
             });
 
+            // Date selection
+            document.getElementById("date-continue").addEventListener("click", function() {
+                if (datePicker.value) {
+                    dateInput.value = datePicker.value;
+                    
+                    // Move to next step
+                    dateStep.classList.add("collapsed");
+                    showStep.classList.remove("collapsed");
+                    
+                    // Fetch shows with date
+                    fetchShows(theatreInput.value, eventInput.value);
+                } else {
+                    alert("Please select a date");
+                }
+            });
+
+
             function fetchShows(theatreId, eventId) {
-                fetch(`/book/get-shows/?theatre_id=${theatreId}&event_id=${eventId}`)
+                const selectedDate = dateInput.value;
+                fetch(`/book/get-shows/?theatre_id=${theatreId}&event_id=${eventId}&date=${selectedDate}`)
                     .then(response => response.json())
                     .then(data => {
-                        showSelect.innerHTML = '<option value="">-- Select a show --</option>';
+                        showContainer.innerHTML = '';
                         data.shows.forEach(show => {
-                            showSelect.innerHTML += `<option value="${show.id}">${show.time}</option>`;
+                            showContainer.innerHTML += `
+                                <div class="selection-item show-item" data-id="${show.id}">
+                                    ${show.time}
+                                </div>
+                            `;
                         });
                     });
             }
 
-            showSelect.addEventListener("change", function () {
-                if (this.value) {
-                    tierSelect.disabled = false;
-                    fetchTiers(this.value);
-                } else {
-                    tierSelect.disabled = true;
-                    seatSelect.disabled = true;
+
+            // Show selection
+            showContainer.addEventListener("click", function(e) {
+                if (e.target.classList.contains("show-item")) {
+                    // Clear previous selection
+                    document.querySelectorAll(".show-item.selected").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+                    
+                    // Select this item
+                    e.target.classList.add("selected");
+                    const showId = e.target.dataset.id;
+                    showInput.value = showId;
+                    
+                    // Move to next step
+                    showStep.classList.add("collapsed");
+                    tierStep.classList.remove("collapsed");
+                    
+                    // Fetch tiers
+                    fetchTiers(showId);
                 }
             });
 
@@ -193,43 +379,99 @@
                 fetch(`/book/get-tiers/?show_id=${showId}`)
                     .then(response => response.json())
                     .then(data => {
-                        tierSelect.innerHTML = '<option value="">-- Select a tier --</option>';
+                        tierContainer.innerHTML = '';
                         data.tiers.forEach(tier => {
-                            tierSelect.innerHTML += `<option value="${tier.id}">${tier.name} - ₹${tier.price}</option>`;
+                            tierContainer.innerHTML += `
+                                <div class="selection-item tier-item" data-id="${tier.id}">
+                                    ${tier.name}<br>₹${tier.price}
+                                </div>
+                            `;
                         });
                     });
             }
 
-            tierSelect.addEventListener("change", function() {
-                if (this.value) {
-                    seatSelect.disabled = false;
-                    fetchSeats(this.value);
-                } else {
-                    seatSelect.disabled = true;
+
+            // Tier selection
+            tierContainer.addEventListener("click", function(e) {
+                if (e.target.classList.contains("tier-item")) {
+                    // Clear previous selection
+                    document.querySelectorAll(".tier-item.selected").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+                    
+                    // Select this item
+                    e.target.classList.add("selected");
+                    const tierId = e.target.dataset.id;
+                    tierInput.value = tierId;
+                    
+                    // Move to next step
+                    tierStep.classList.add("collapsed");
+                    seatStep.classList.remove("collapsed");
+                    
+                    // Fetch seats
+                    fetchSeats(tierId);
                 }
             });
 
             function fetchSeats(tierId) {
-                const showId = document.getElementById("show-select").value;
-                const selectedDate = document.getElementById("date-input").value;
+                const showId = showInput.value;
 
-                if (!showId || !selectedDate) {
-                    console.error("Show ID or Date is missing");
+                if (!showId) {
+                    console.error("Show ID is missing");
                     return;
                 }
 
-                fetch(`/book/get-seats/?tier_id=${tierId}&show_id=${showId}&date=${selectedDate}`)
+                // Fetch seats from the server (including seat status: booked or available)
+                fetch(`/book/get-seats/?tier_id=${tierId}&show_id=${showId}`)
                     .then(response => response.json())
                     .then(data => {
-                        seatSelect.innerHTML = '<option value="">-- Select a seat --</option>';
+                        seatContainer.innerHTML = ''; // Clear the seat container
                         data.seats.forEach(seat => {
-                            seatSelect.innerHTML += `<option value="${seat.id}">${seat.seat_number}</option>`;
+                            // Adding different classes for booked and available seats
+                            let seatClass = seat.booked ? 'seat-item booked' : 'seat-item available';
+                            
+                            seatContainer.innerHTML += `
+                                <div class="${seatClass}" data-id="${seat.id}">
+                                    ${seat.seat_number}
+                                </div>
+                            `;
                         });
                     })
                     .catch(error => console.error("Error fetching seats:", error));
             }
+
+
+            // Seat selection
+            seatContainer.addEventListener("click", function(e) {
+                if (e.target.classList.contains("seat-item")) {
+                    // Clear previous selection
+                    document.querySelectorAll(".seat-item.selected").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+
+                    // Select this item
+                    e.target.classList.add("selected");
+                    const seatId = e.target.dataset.id;
+                    seatInput.value = seatId;
+                }
+            });
+
+
+            // Back buttons
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetStep = document.getElementById(this.dataset.target);
+                    
+                    // Hide all steps
+                    document.querySelectorAll('.step-container').forEach(step => {
+                        step.classList.add('collapsed');
+                    });
+                    
+                    // Show target step
+                    targetStep.classList.remove('collapsed');
+                });
+            });
         });
     </script>
-
 </body>
 </html>

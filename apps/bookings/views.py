@@ -48,13 +48,33 @@ def book_ticket(request):
     events = Event.objects.filter(showtime__screen__theatre_id=selected_theatre_id).distinct() if selected_theatre_id else []
     selected_event_id = request.GET.get("event")
     selected_date = request.GET.get("date")
+    selected_show_id = request.GET.get("show")
     # booking_date, created = Date.objects.get_or_create(date=date)
-    shows = Showtime.objects.filter(screen__theatre_id=selected_theatre_id, event_id=selected_event_id, date=selected_date) if selected_theatre_id and selected_event_id and selected_date else []
+    #shows = Showtime.objects.filter(screen__theatre_id=selected_theatre_id, event_id=selected_event_id, date=selected_date) if selected_theatre_id and selected_event_id and selected_date else []
+    shows = Showtime.objects.filter(
+        screen__theatre_id=selected_theatre_id,
+        event_id=selected_event_id,
+        show_date=selected_date  # Correct field name
+    ) if selected_theatre_id and selected_event_id and selected_date else []
 
     
-    tiers = Tier.objects.all()
+    # tiers = Tier.objects.all()
+    # Only load tiers for the selected screen
+    tiers = Tier.objects.filter(screen_id=selected_theatre_id) if selected_theatre_id else []
+
     selected_tier_id = request.GET.get("tier")
-    seats = Seat.objects.all()
+    # Only load seats for the selected tier
+    seats = Seat.objects.filter(tier_id=selected_tier_id) if selected_tier_id else []
+
+    # To also filter out booked seats
+    if selected_show_id and selected_date:
+        booked_seat_ids = UniqueSeatBooking.objects.filter(
+            show_id=selected_show_id,
+            date=selected_date
+        ).values_list('seat_id', flat=True)
+        
+        seats = seats.exclude(id__in=booked_seat_ids)
+
 
 
     if request.method == "POST":
@@ -298,18 +318,24 @@ from .models import Showtime  # Make sure it's "Showtime" (as per your model)
 def get_shows(request):
     theatre_id = request.GET.get("theatre_id")
     event_id = request.GET.get("event_id")
+    date = request.GET.get("date")  # Add this line
 
-    if theatre_id and event_id:
-        shows = Showtime.objects.filter(screen__theatre_id=theatre_id, event_id=event_id)
+    if theatre_id and event_id and date:  # Include date in condition
+        shows = Showtime.objects.filter(
+            screen__theatre_id=theatre_id, 
+            event_id=event_id,
+            show_date=date  # Add this filter
+        )
         
         show_list = [{
             "id": show.id,
-            "time": show.slot_time.strftime("%I:%M %p")  # Adjust field name if needed
+            "time": show.slot_time.strftime("%I:%M %p")
         } for show in shows]
 
         return JsonResponse({"shows": show_list})
 
     return JsonResponse({"shows": []})
+
 
 from django.http import JsonResponse
 from .models import Seat, Showtime
@@ -349,23 +375,28 @@ def get_seats(request):
 
 def get_tiers(request):
     show_id = request.GET.get("show_id")
-    if not show_id:
-        return JsonResponse({"error": "Missing show ID"}, status=400)
+    
+    if show_id:
+        # Get the screen_id from the show
+        try:
+            show = Showtime.objects.get(id=show_id)
+            screen_id = show.screen_id
+            
+            # Filter tiers by screen_id
+            tiers = Tier.objects.filter(screen_id=screen_id)
+            
+            tier_list = [{
+                "id": tier.id,
+                "name": tier.tier_name,
+                "price": float(tier.price)
+            } for tier in tiers]
+            
+            return JsonResponse({"tiers": tier_list})
+        except Showtime.DoesNotExist:
+            return JsonResponse({"tiers": []})
+    
+    return JsonResponse({"tiers": []})
 
-    try:
-        # Get screen linked to the show
-        show = Showtime.objects.get(id=show_id)
-        screen = show.screen
-
-        # Get tiers linked to this screen
-        tiers = Tier.objects.all()  # Fetch all tiers initially
-
-        tier_data = [{"id": tier.id, "name": tier.tier_name, "price": str(tier.price)} for tier in tiers]
-
-        return JsonResponse({"tiers": tier_data})
-
-    except Showtime.DoesNotExist:
-        return JsonResponse({"error": "Invalid show ID"}, status=400)
     
 
 
@@ -515,7 +546,7 @@ def process_payment(request, unique_seat_id):
             )
             print(f"DEBUG: Transaction created: {transaction}")
 
-            messages.success(request, "Payment successful! Your booking is confirmed.")
+            # messages.success(request, "Payment successful! Your booking is confirmed.")
             print("DEBUG: Redirecting to booking_success with booking_id:", booking.id)
             # Update booking status to confirmed
             booking.status = Booking.CONFIRMED 
