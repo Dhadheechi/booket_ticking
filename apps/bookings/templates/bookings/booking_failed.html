@@ -1,55 +1,51 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="booking-failed-container">
-    <div class="booking-failed-card">
-        <h2>Booking Failed</h2>
-        <p>{{ message }}</p>
-        <div class="actions">
-            <a href="{% url 'book_ticket' %}" class="btn btn-primary">Try Again</a>
-            <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
-        </div>
+  <div class="booking-failed-card">
+    <h2>Booking Failed</h2>
+    <p>{{ message }}</p>
+    <div class="actions">
+      <a href="{% url 'book_ticket' %}" class="btn btn-primary">Try Again</a>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
     </div>
+  </div>
 </div>
-{% endblock %}
-
-{% block extra_head %}
+{% endblock %} {% block extra_head %}
 <style>
-    .booking-failed-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 70vh;
-    }
-    .booking-failed-card {
-        text-align: center;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-        padding: 30px;
-        border-radius: 10px;
-        max-width: 500px;
-        width: 100%;
-    }
-    .actions {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 20px;
-    }
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-    .btn-primary {
-        background-color: #dc3545;
-        color: white;
-    }
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
+  .booking-failed-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+  }
+  .booking-failed-card {
+    text-align: center;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+  }
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .btn-primary {
+    background-color: #dc3545;
+    color: white;
+  }
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
 </style>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Customer  # Import the Customer model
+from .models import Customer 
 
 def register(request):
     if request.method == 'POST':
@@ -23,13 +23,13 @@ def register(request):
             messages.error(request, "Passwords do not match.")
             return redirect('register')
 
-        # ✅ Create user
+ 
         user = User.objects.create_user(username=username, email=email, password=password1)
         user.save()
 
-        # ✅ Auto-create Customer profile
+    
         customer = Customer.objects.create(user=user, customer_name=username, email_id=email, phone_no=phone_no)
-        print(f"✅ Customer Profile Created: {customer}")  # Debugging
+    
 
         messages.success(request, "Registration successful. Please log in.")
         return redirect('login')
@@ -51,12 +51,12 @@ def user_login(request):
         if user is not None:
             login(request, user)
 
-            # ✅ Check if Customer profile exists
+     
             if not Customer.objects.filter(user=user).exists():
                 messages.error(request, "No customer profile found. Please complete your registration.")
-                return redirect('register')  # Redirect to registration page
+                return redirect('register') 
             
-            return redirect('home')  # Redirect to home page after successful login
+            return redirect('home') 
         else:
             messages.error(request, "Invalid username or password.")
     

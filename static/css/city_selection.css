@@ -1,4 +1,4 @@
-/* Modal Container */
+
 .city-modal {
     display: flex;
     justify-content: center;
@@ -9,7 +9,7 @@
     background: linear-gradient(-45deg, #90EE90, #A7F1A8, #BFF4BE, #D6F6D5);
     background-size: 300% 300%;
     animation: bgAnimation 15s ease infinite;
-    backdrop-filter: none; /* Removed blur effect */
+    backdrop-filter: none; 
 }
 
 @keyframes bgAnimation {
@@ -18,18 +18,18 @@
     100% { background-position: 0% 50%; }
 }
 
-/* Modal Box - 1.5x larger */
+
 .modal-content {
     background: white;
-    padding: 45px; /* Increased from 30px */
-    border-radius: 18px; /* Increased from 12px */
-    width: 900px; /* Increased from 600px - this is 1.5x larger */
+    padding: 45px; 
+    border-radius: 18px; 
+    width: 900px; 
     max-width: 90%;
     box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.25);
     text-align: center;
 }
 
-/* Search Bar */
+
 #citySearch {
     width: 100%;
     padding: 12px;
@@ -40,7 +40,7 @@
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* City List */
+
 .city-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -71,7 +71,7 @@
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Scrollbar Styling */
+
 .city-list::-webkit-scrollbar {
     width: 8px;
 }

@@ -1,147 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Select Your City</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/city_selection.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/city_selection.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
     <style>
-        /* 🎨 Gradient Background with Smooth Animation */
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(-45deg, #2c3e50, #34495e, #2c3e50, #1a252f);
-            background-size: 300% 300%;
-            animation: bgAnimation 10s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(-45deg, #2c3e50, #34495e, #2c3e50, #1a252f);
+        background-size: 300% 300%;
+        animation: bgAnimation 10s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-        @keyframes bgAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+      @keyframes bgAnimation {
+        0% {
+          background-position: 0% 50%;
         }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
 
-        /* 📦 Stylish Modal */
-        .city-modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-        }
+      .city-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+      }
 
-        /* 🏙️ Enlarged & Improved Modal Box */
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 500px; /* Increased width */
-            box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.25);
-            text-align: center;
-            transform: scale(0.9);
-            transition: all 0.3s ease-in-out;
-        }
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 500px;
+        box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        transform: scale(0.9);
+        transition: all 0.3s ease-in-out;
+      }
 
-        .city-modal.show .modal-content {
-            transform: scale(1);
-        }
+      .city-modal.show .modal-content {
+        transform: scale(1);
+      }
 
-        /* 🔍 Search Box */
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
+      .search-input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-bottom: 15px;
+      }
 
-        /* 📜 City List */
-        .city-list {
-            max-height: 250px;
-            overflow-y: auto;
-            border-radius: 6px;
-            background: #f9f9f9;
-            padding: 10px;
-            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
-        }
+      .city-list {
+        max-height: 250px;
+        overflow-y: auto;
+        border-radius: 6px;
+        background: #f9f9f9;
+        padding: 10px;
+        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
+      }
 
-        .city {
-            padding: 12px;
-            font-size: 16px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+      .city {
+        padding: 12px;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: 0.3s;
+      }
 
-        .city:hover {
-            background: #dff0ff;
-            font-weight: bold;
-        }
+      .city:hover {
+        background: #dff0ff;
+        font-weight: bold;
+      }
 
-        /* ✨ Smooth Modal Opening */
-        .city-modal {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
+      .city-modal {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
 
-        .city-modal.show {
-            opacity: 1;
-        }
+      .city-modal.show {
+        opacity: 1;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="city-modal show" id="cityModal">
-        <div class="modal-content" style="width:45em; height:35em;">
-            <h3>Select Your City</h3>
+      <div class="modal-content" style="width: 45em; height: 35em">
+        <h3>Select Your City</h3>
 
-            <input type="text" id="citySearch" class="search-input" placeholder="Search for your city">
-            
-            <div class="city-list" id="cityList">
-                {% for city in cities %}
-                    <div class="city" data-city-id="{{ city.id }}" onclick="selectCity('{{ city.id }}')">
-                        {{ city.city_name }}
-                    </div>
-                {% endfor %}
-            </div>
+        <input
+          type="text"
+          id="citySearch"
+          class="search-input"
+          placeholder="Search for your city"
+        />
+
+        <div class="city-list" id="cityList">
+          {% for city in cities %}
+          <div
+            class="city"
+            data-city-id="{{ city.id }}"
+            onclick="selectCity('{{ city.id }}')"
+          >
+            {{ city.city_name }}
+          </div>
+          {% endfor %}
         </div>
+      </div>
     </div>
 
     <form id="cityForm" action="{% url 'set_city' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="city_id" id="selectedCityId">
+      {% csrf_token %}
+      <input type="hidden" name="city_id" id="selectedCityId" />
     </form>
 
     <script>
-        /* 🔍 City Search Filtering */
-        document.getElementById("citySearch").addEventListener("input", function() {
-            let filter = this.value.toLowerCase();
-            let cities = document.querySelectorAll(".city");
-            cities.forEach(city => {
-                if (city.textContent.toLowerCase().includes(filter)) {
-                    city.style.display = "block";
-                } else {
-                    city.style.display = "none";
-                }
-            });
+      document
+        .getElementById("citySearch")
+        .addEventListener("input", function () {
+          let filter = this.value.toLowerCase();
+          let cities = document.querySelectorAll(".city");
+          cities.forEach((city) => {
+            if (city.textContent.toLowerCase().includes(filter)) {
+              city.style.display = "block";
+            } else {
+              city.style.display = "none";
+            }
+          });
         });
 
-        /* ✅ Selecting City */
-        function selectCity(cityId) {
-            document.getElementById('selectedCityId').value = cityId;
-            document.getElementById('cityForm').submit();
-        }
+      function selectCity(cityId) {
+        document.getElementById("selectedCityId").value = cityId;
+        document.getElementById("cityForm").submit();
+      }
     </script>
-
-</body>
+  </body>
 </html>

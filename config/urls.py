@@ -17,11 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from apps.bookings.views import index  # Import the index view
+from apps.bookings.views import index
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", index, name="index"),  # Redirects to register
-    path("book/", include("apps.bookings.urls")),  # Ensure the bookings app URLs are included
-    
+    path("", index, name="index"),
+    path("book/", include("apps.bookings.urls")),
 ]

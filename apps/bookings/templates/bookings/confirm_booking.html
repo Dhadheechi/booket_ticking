@@ -1,94 +1,91 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="booking-confirmation">
-    <h2>Booking Confirmation</h2>
-    
-    <div class="confirmation-details">
-        <div class="detail-section">
-            <h3>Event Details</h3>
-            <p><strong>Event Name:</strong> {{ event.event_name }}</p>
-            <p><strong>Date:</strong> {{ date }}</p>
-            <p><strong>Show Time:</strong> {{ show.slot_time }}</p>
-        </div>
-        
-        <div class="detail-section">
-            <h3>Venue Details</h3>
-            <p><strong>City:</strong> {{ city.city_name }}</p>
-            <p><strong>Theatre:</strong> {{ theatre.theatre_name }}</p>
-            <!-- <p><strong>Screen:</strong> {{ screen.screen_number }}</p> -->
-        </div>
-        
-        <div class="detail-section">
-            <h3>Seat Details</h3>
-            <p><strong>Seat Number:</strong> {{ seat.seat_number }}</p>
-            <p><strong>Tier:</strong> {{ tier.tier_name }}</p>
-            <p><strong>Price:</strong> ${{ tier.price }}</p>
-        </div>
-        
-        <div class="detail-section">
-            <h3>Booking Reference</h3>
-            <p><strong>Booking ID:</strong> {{ unique_booking.unique_seat_id }}</p>
-        </div>
-    </div>
-    
-    <div class="confirmation-actions">
-        <a href="{% url 'initiate_payment' unique_seat_id=unique_booking.unique_seat_id %}" class="btn">Proceed to pay</a>
-        <a href="{% url 'home' %}" class="btn">Return to Home</a>
-        <!-- <a href="{% url 'download_booking_pdf' unique_booking.unique_seat_id %}" class="btn">Download as PDF</a> -->
+  <h2>Booking Confirmation</h2>
 
+  <div class="confirmation-details">
+    <div class="detail-section">
+      <h3>Event Details</h3>
+      <p><strong>Event Name:</strong> {{ event.event_name }}</p>
+      <p><strong>Date:</strong> {{ date }}</p>
+      <p><strong>Show Time:</strong> {{ show.slot_time }}</p>
     </div>
+
+    <div class="detail-section">
+      <h3>Venue Details</h3>
+      <p><strong>City:</strong> {{ city.city_name }}</p>
+      <p><strong>Theatre:</strong> {{ theatre.theatre_name }}</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>Seat Details</h3>
+      <p><strong>Seat Number:</strong> {{ seat.seat_number }}</p>
+      <p><strong>Tier:</strong> {{ tier.tier_name }}</p>
+      <p><strong>Price:</strong> ${{ tier.price }}</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>Booking Reference</h3>
+      <p><strong>Booking ID:</strong> {{ unique_booking.unique_seat_id }}</p>
+    </div>
+  </div>
+
+  <div class="confirmation-actions">
+    <a
+      href="{% url 'initiate_payment' unique_seat_id=unique_booking.unique_seat_id %}"
+      class="btn"
+      >Proceed to pay</a
+    >
+    <a href="{% url 'home' %}" class="btn">Return to Home</a>
+  </div>
 </div>
-{% endblock %}
-
-{% block extra_head %}
+{% endblock %} {% block extra_head %}
 <style>
-    .booking-confirmation {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .confirmation-details {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-    
-    .detail-section {
-        background-color: #f9f9f9;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .detail-section h3 {
-        margin-top: 0;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 8px;
-        margin-bottom: 12px;
-    }
-    
-    .confirmation-actions {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        margin-top: 20px;
-    }
-    
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #3498db;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: bold;
-    }
-    
-    .btn:hover {
-        background-color: #2980b9;
-    }
+  .booking-confirmation {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .confirmation-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .detail-section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .detail-section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .confirmation-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  .btn:hover {
+    background-color: #2980b9;
+  }
 </style>
 {% endblock %}
